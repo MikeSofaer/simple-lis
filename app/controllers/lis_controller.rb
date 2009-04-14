@@ -21,7 +21,7 @@ class LisController < ActionController::Base
   def update
     begin
       doc = Hpricot(request.body)
-      if doc.send(resource.pluralize).is_a? Hpricot::Elem
+      if doc.children_of_type(resource.pluralize).blank?
         list = doc.send(resource.pluralize).send(resource).map{|o| model.from_xml o}
         model.import(list, :on_duplicate_key_update => ["sourced_id"], :validate => false)
         urls = list.map{|object|  "<url>#{url_for(:action => 'show', :sourced_id => object.sourced_id)}</url>"}

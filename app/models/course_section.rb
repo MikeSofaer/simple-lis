@@ -3,7 +3,7 @@ class CourseSection < ActiveRecord::Base
     object = find_by_sourced_id(doc.sourced_id)
     object[:update] = true if object
     object ||= new(:sourced_id => doc.sourced_id)
-    object.course_offering_course_id = doc.course_offering_sourced_id
+    object.course_offering_sourced_id = doc.course_offering_sourced_id
     object.label = doc.label
     object
   end

@@ -1,4 +1,4 @@
-class CourseTemplateController < LisController
+class CourseTemplatesController < LisController
   def model
     CourseTemplate
   end
