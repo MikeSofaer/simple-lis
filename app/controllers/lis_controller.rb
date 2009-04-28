@@ -46,6 +46,9 @@ class LisController < ActionController::Base
     rescue TypeError
       render :xml => "There is something terribly wrong with your request.", :status => :unprocessable_entity
       return
+    rescue Mysql::Error
+      render :xml => "Database rejected your request, please make sure all foreign keys are valid", :status => :unprocessable_entity
+      return
     end
   end
   def delete
