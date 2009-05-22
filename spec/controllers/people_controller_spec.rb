@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-
+=begin
 describe PeopleController do
   describe "get requests" do
     it "should return a list of people on index" do
@@ -163,3 +163,4 @@ describe PeopleController do
     it "object returned should correctly reproduce XML"
   end
 end
+=end

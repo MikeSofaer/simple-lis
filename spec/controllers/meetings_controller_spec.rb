@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-
+=begin
 describe MeetingsController do
   describe "put requests" do
     it "should succeed at a put with an OK meeting" do
@@ -37,3 +37,4 @@ END:VCALENDAR
   end
 end
 
+=end

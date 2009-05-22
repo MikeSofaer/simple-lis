@@ -31,7 +31,7 @@ class LisController < ActionController::Base
         object.save!
         render :xml => "<url>#{url_for(:action => 'show', :sourced_id => object.sourced_id)}</url>", :status => object[:update] ? :ok : :created
       end
-    rescue Hpricot::BadFieldError => e
+    rescue Hpricot::MissingFieldError => e
       render :xml => e.message, :status => :unprocessable_entity
       return
     rescue NoMethodError => e

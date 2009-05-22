@@ -1,7 +1,7 @@
 require 'hpricot'
 
 module Hpricot
-  class BadFieldError < Hpricot::Error #:nodoc:
+  class MissingFieldError < Hpricot::Error #:nodoc:
   end
   class Elem
     def method_missing(method, *args)
@@ -12,7 +12,7 @@ module Hpricot
         return child
       end
       if list.blank?
-         raise BadFieldError, "There is no field with the name '#{method.to_s}' in \n#{self.to_s}"
+         raise MissingFieldError, "There is no field with the name '#{method.to_s}' in \n#{self.to_s}"
       end
       return list
     end
@@ -26,7 +26,7 @@ module Hpricot
         return child
       end
       if list.blank?
-         raise BadFieldError, "There is no field with the name '#{method.to_s}' in \n#{self.to_s}"
+         raise MissingFieldError, "There is no field with the name '#{method.to_s}' in \n#{self.to_s}"
       end
       return list
     end
