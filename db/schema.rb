@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(:version => 20090216220803) do
     t.string   "target_type",       :null => false
     t.string   "target_sourced_id", :null => false
     t.string   "person_sourced_id", :null => false
-    t.string   "term_sourced_id",   :null => false
+    t.string   "term_sourced_id"
     t.string   "role",              :null => false
     t.datetime "starts_at"
     t.datetime "ends_at"
@@ -102,7 +102,7 @@ ActiveRecord::Schema.define(:version => 20090216220803) do
     t.datetime "updated_at"
   end
 
-  add_index "people", ["email"], :name => "index_people_on_email", :unique => true
+  add_index "people", ["email"], :name => "index_people_on_email"
   add_index "people", ["sourced_id"], :name => "index_people_on_sourced_id", :unique => true
 
   create_table "terms", :force => true do |t|
