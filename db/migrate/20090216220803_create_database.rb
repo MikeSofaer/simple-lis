@@ -27,8 +27,8 @@ class CreateDatabase < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
       t.string "title", :null => false
-      t.datetime "begins_on",                      :null => false
-      t.datetime "ends_on"  ,                      :null => false
+      t.datetime "starts_at"             
+      t.datetime "ends_at"
     end
     add_index "terms", ["sourced_id"], :name => "index_terms_on_sourced_id", :unique => true
 
@@ -79,6 +79,8 @@ class CreateDatabase < ActiveRecord::Migration
       t.string "person_sourced_id", :null => false
       t.string "term_sourced_id", :null => false
       t.string "role", :null => false
+      t.datetime "starts_at"
+      t.datetime "ends_at"
       t.foreign_key :person_sourced_id, :people, :sourced_id, :on_delete => :cascade
       t.foreign_key :term_sourced_id, :terms, :sourced_id
     end

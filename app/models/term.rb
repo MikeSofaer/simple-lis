@@ -1,19 +1,16 @@
 class Term < ActiveRecord::Base
   def self.from_xml(doc)
-    object = find_by_sourced_id(doc.sourced_id)
-    object[:update] = true if object
-    object ||= new(:sourced_id => doc.sourced_id)
-    object.title = doc.title
-    object.begins_on = Date.parse(doc.begins_on)
-    object.ends_on = Date.parse(doc.ends_on)
-    object
+    new(:sourced_id => doc.sourced_id,
+      :title => doc.title,
+      :starts_at => doc.optional(:starts_at),
+      :ends_at => doc.optional(:ends_at))
   end
-  def return_xml
+  def to_xml
     "<term>
     <sourced_id>#{sourced_id}</sourced_id>
     <title>#{title}</title>
-    <begins_on>#{begins_on}</begins_on>
-    <ends_on>#{ends_on}</ends_on>
+    <starts_at>#{starts_at}</starts_at>
+    <ends_at>#{ends_at}</ends_at>
     </term>"
   end
 end

@@ -1,17 +1,19 @@
 class Meeting < ActiveRecord::Base
   acts_as_ical
-
-  def self.from_xml(doc)
-    object = find_by_sourced_id(doc.sourced_id)
-    object[:update] = true if object
-    object ||= new(:sourced_id => doc.sourced_id)
-    object.target_sourced_id = doc.target_sourced_id
-    object.target_type = doc.target_type
-    object.set_ical(doc.i_calendar)
-    object
+  def target=(target)
+    self.target_sourced_id = target.sourced_id
+    self.target_type = target.class.table_name
   end
 
-  def return_xml
+  def self.from_xml(doc)
+    m = new(:sourced_id => doc.sourced_id,
+    :target_sourced_id => doc.target_sourced_id,
+    :target_type => doc.target_type)
+    m.set_ical(doc.i_calendar)
+    m
+  end
+
+  def to_xml
     "<meeting>
     <sourced_id>#{sourced_id}</sourced_id>
     <target_sourced_id>#{target_sourced_id}</target_sourced_id>

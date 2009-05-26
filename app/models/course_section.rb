@@ -1,21 +1,19 @@
 class CourseSection < ActiveRecord::Base
-  def self.from_xml(doc)
-    object = find_by_sourced_id(doc.sourced_id)
-    object[:update] = true if object
-    object ||= new(:sourced_id => doc.sourced_id)
-    object.course_offering_sourced_id = doc.course_offering_sourced_id
-    object.label = doc.label
-    object
+  def course_offering=(offering)
+    self.course_offering_sourced_id = offering.sourced_id
   end
-  def return_xml
+  def self.from_xml(doc)
+    new(:sourced_id => doc.sourced_id,
+    :course_offering_sourced_id => doc.course_offering_sourced_id,
+    :label => doc.label,
+    :description => doc.optional(:description))
+  end
+  def to_xml
     "<course_section>
     <sourced_id>#{sourced_id}</sourced_id>
     <course_offering_sourced_id>#{course_offering_sourced_id}</course_offering_sourced_id>
-    <label>#{label}</label>#{description_tag}
+    <label>#{label}</label>
+    #{optional_xml(:description)}
     </course_section>"
-  end
-  private
-  def description_tag
-    description.blank? ? nil : "\n<description>#{description}</description>"
   end
 end

@@ -1,7 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-    sourced_id: sample
-    title: Sample Course
-    description: A course that doesn't exist, because I made it up!
-    code: FAKE101

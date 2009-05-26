@@ -83,6 +83,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "person_sourced_id"
     t.string   "term_sourced_id"
     t.string   "role"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
   end
 
   add_index "memberships", ["sourced_id"], :name => "index_memberships_on_sourced_id", :unique => true
@@ -107,8 +109,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "title",      :null => false
-    t.datetime "begins_on"
-    t.datetime "ends_on"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
   end
 
   add_index "terms", ["sourced_id"], :name => "index_terms_on_sourced_id", :unique => true

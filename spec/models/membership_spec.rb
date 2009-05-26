@@ -1,20 +1,15 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Membership do
+describe "Membership" do
   before(:each) do
-    @membership = Membership.first
+    @membership = Factory.build(:membership)
   end
-
-  it "should return properly formatted XML" do
-    doc = Hpricot("<membership>
-    <sourced_id>1</sourced_id>
-    <person_sourced_id>bobjones1</person_sourced_id>
-    <target_sourced_id>Math</target_sourced_id>
-    <target_type>Group</target_type>
-    <role>Faculty</role>
-    </membership>")
-    out = @membership.return_xml
-    Hpricot(out).to_s.should == doc.to_s
+  describe "generation from XML" do
+    before(:each) do
+      @xml = Hpricot(@membership.to_xml).membership
+    end
+    it "should create a saveable Membership from a valid XML" do
+      Membership.from_xml(@xml).save!
+    end
   end
 end
-
