@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20090216220803) do
 
   create_table "course_offerings", :force => true do |t|
     t.string   "sourced_id",                 :null => false
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 0) do
   add_index "course_offerings", ["sourced_id"], :name => "index_offerings_on_sourced_id", :unique => true
   add_index "course_offerings", ["term_sourced_id"], :name => "term_sourced_id"
   add_index "course_offerings", ["course_template_sourced_id"], :name => "course_template_sourced_id"
+  add_index "course_offerings", ["group_sourced_id"], :name => "group_sourced_id"
 
   create_table "course_sections", :force => true do |t|
     t.string   "sourced_id",                 :null => false
@@ -30,7 +31,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.datetime "updated_at"
     t.string   "course_offering_sourced_id", :null => false
     t.string   "description"
-    t.string   "label"
+    t.string   "label",                      :null => false
   end
 
   add_index "course_sections", ["sourced_id"], :name => "index_course_sections_on_sourced_id", :unique => true
@@ -40,9 +41,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "sourced_id",  :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title"
+    t.string   "title",       :null => false
     t.string   "description"
-    t.string   "code"
+    t.string   "code",        :null => false
   end
 
   add_index "course_templates", ["sourced_id"], :name => "index_course_templates_on_sourced_id", :unique => true
@@ -51,9 +52,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "sourced_id",        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title"
-    t.string   "category"
-    t.string   "sub_category"
+    t.string   "title",             :null => false
+    t.string   "category",          :null => false
+    t.string   "sub_category",      :null => false
     t.string   "description"
     t.string   "parent_sourced_id"
     t.string   "location"
@@ -66,9 +67,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "sourced_id",        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "target_type"
-    t.string   "target_sourced_id"
-    t.text     "raw_icalendar"
+    t.string   "target_type",       :null => false
+    t.string   "target_sourced_id", :null => false
+    t.text     "raw_icalendar",     :null => false
   end
 
   add_index "meetings", ["sourced_id"], :name => "index_meetings_on_sourced_id", :unique => true
@@ -78,11 +79,11 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string   "sourced_id",        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "target_type"
-    t.string   "target_sourced_id"
-    t.string   "person_sourced_id"
-    t.string   "term_sourced_id"
-    t.string   "role"
+    t.string   "target_type",       :null => false
+    t.string   "target_sourced_id", :null => false
+    t.string   "person_sourced_id", :null => false
+    t.string   "term_sourced_id",   :null => false
+    t.string   "role",              :null => false
     t.datetime "starts_at"
     t.datetime "ends_at"
   end
@@ -117,6 +118,7 @@ ActiveRecord::Schema.define(:version => 0) do
 
   add_foreign_key "course_offerings", ["term_sourced_id"], "terms", ["sourced_id"], :name => "course_offerings_ibfk_1"
   add_foreign_key "course_offerings", ["course_template_sourced_id"], "course_templates", ["sourced_id"], :name => "course_offerings_ibfk_2"
+  add_foreign_key "course_offerings", ["group_sourced_id"], "groups", ["sourced_id"], :on_delete => :set_null, :name => "course_offerings_ibfk_3"
 
   add_foreign_key "course_sections", ["course_offering_sourced_id"], "course_offerings", ["sourced_id"], :name => "course_sections_ibfk_1"
 

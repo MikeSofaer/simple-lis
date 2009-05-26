@@ -1,7 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-=begin
 describe PeopleController do
   describe "get requests" do
+    before(:each) do
+      Factory(:person, :sourced_id => "bobjones1")
+    end
     it "should return a list of people on index" do
       get :index
       doc = Hpricot(response.body)
@@ -18,10 +20,17 @@ describe PeopleController do
     end
   end
   describe "put requests" do
-    it "should fail a put with an empty person" do
-      request.env['RAW_POST_DATA'] = "<person></person>"
-      put :update
-      response.status.should == "422 Unprocessable Entity"
+    before(:each) do
+      @xml = Hpricot("<people><person>
+  <sourced_id>bjones8</sourced_id>
+  <names>
+    <given>Bob</given>
+    <family>Jones</family>
+  </names>
+  <contact_info>
+    <email>bob@your_school.edu</email>
+  </contact_info>
+</person></people>")
     end
     it "should fail a put with an empty person" do
       request.env['RAW_POST_DATA'] = "<person></person>"
@@ -29,83 +38,20 @@ describe PeopleController do
       response.status.should == "422 Unprocessable Entity"
     end
     it "should fail a put with no sourced_id" do
-      request.env['RAW_POST_DATA'] = "
-    <person>
-  <names>
-    <given>Bob</given>
-    <family>Jones</family>
-  </names>
-  <contact_info>
-    <email>bob@your_school.edu</email>
-  </contact_info>
-</person>"
-      put :update
-      response.status.should == "422 Unprocessable Entity"
-    end
-    it "should fail a put with no given name" do
-      request.env['RAW_POST_DATA'] = "<person>
-  <sourced_id>bjones8</sourced_id>
-  <names>
-    <family>Jones</family>
-  </names>
-  <contact_info>
-    <email>bob@your_school.edu</email>
-  </contact_info>
-</person>"
-      put :update
-      response.status.should == "422 Unprocessable Entity"
-    end
-    it "should fail a put with no family name" do
-      request.env['RAW_POST_DATA'] = "<person>
-  <sourced_id>bjones8</sourced_id>
-  <names>
-    <given>Bob</given>
-  </names>
-  <contact_info>
-    <email>bob@your_school.edu</email>
-  </contact_info>
-</person>"
-      put :update
-      response.status.should == "422 Unprocessable Entity"
-    end
-    it "should fail a put with no email" do
-      request.env['RAW_POST_DATA'] = "<person>
-  <sourced_id>bjones8</sourced_id>
-  <names>
-    <given>Bob</given>
-    <family>Jones</family>
-  </names>
-  <contact_info>
-  </contact_info>
-</person>"
+      @xml.search('sourced_id').remove
+      request.env['RAW_POST_DATA'] = @xml.to_s
       put :update
       response.status.should == "422 Unprocessable Entity"
     end
     it "should fail a put with a duplicate email" do
-      request.env['RAW_POST_DATA'] = "<person>
-  <sourced_id>bjones8</sourced_id>
-  <names>
-    <given>Bob</given>
-    <family>Jones</family>
-  </names>
-  <contact_info>
-    <email>bobjones@your_school.edu</email>
-  </contact_info>
-</person>"
+      Factory(:person, :email => "bob@your_school.edu")
+      request.env['RAW_POST_DATA'] = @xml.to_s
       put :update
       response.status.should == "422 Unprocessable Entity"
+      response.body.should == "Duplicate field in your XML"
     end
     it "should succeed at a put with an OK person" do
-      request.env['RAW_POST_DATA'] = "<person>
-  <sourced_id>bjones8</sourced_id>
-  <names>
-    <given>Bob</given>
-    <family>Jones</family>
-  </names>
-  <contact_info>
-    <email>bob@your_school.edu</email>
-  </contact_info>
-</person>"
+      request.env['RAW_POST_DATA'] = @xml.to_s
       put :update
       response.status.should == "201 Created"
     end
@@ -163,4 +109,3 @@ describe PeopleController do
     it "object returned should correctly reproduce XML"
   end
 end
-=end
