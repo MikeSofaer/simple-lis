@@ -1,9 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-=begin
 describe MeetingsController do
   describe "put requests" do
     it "should succeed at a put with an OK meeting" do
-      request.env['RAW_POST_DATA'] = "<meeting>
+      request.env['RAW_POST_DATA'] = "<meetings><meeting>
     <sourced_id>sample2</sourced_id>
     <target_sourced_id>sample</target_sourced_id>
     <target_type>Section</target_type>
@@ -30,11 +29,9 @@ X-LOTUS-UPDATE-WISL:$S:1;$L:1;$B:1;$R:1;$E:1
 END:VEVENT
 END:VCALENDAR
 </i_calendar>
-    </meeting>"
+    </meeting></meetings>"
       put :update
-      response.status.should == "201 Created"
+      response.status.should == "200 OK"
     end
   end
 end
-
-=end
