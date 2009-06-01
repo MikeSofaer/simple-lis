@@ -55,5 +55,8 @@ class LisController < ActionController::Base
     end
     object.destroy
     render :xml => "", :status => :no_content
+    rescue ActiveRecord::StatementInvalid => e
+      render :xml => e.message, :status => :unprocessable_entity
+      return    
   end
 end
