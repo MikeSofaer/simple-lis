@@ -24,7 +24,7 @@ class LisController < ActionController::Base
       xml_list = doc.send(resource.pluralize).send(resource)
       xml_list = [xml_list] unless xml_list.is_a? Array
       list = xml_list.map{|o| model.from_xml o}
-      model.import(list, :on_duplicate_key_update => model.column_names - ["sourced_id"], :validate => false)
+      model.import(list, :on_duplicate_key_update => model.column_names - ["sourced_id", "id", "updated_at"], :validate => false)
       urls = list.map{|object|  "<url>#{url_for(:action => 'show', :sourced_id => object.sourced_id)}</url>"}
       render :xml => urls.join("\n")
     rescue Hpricot::MissingFieldError => e
