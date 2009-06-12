@@ -5,4 +5,7 @@ class GroupsController < LisController
   def resource
     "group"
   end
+  def filterable_on
+    [:category, :sub_category]
+  end
 end

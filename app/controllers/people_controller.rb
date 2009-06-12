@@ -5,4 +5,7 @@ class PeopleController < LisController
   def resource
     "person"
   end
+  def filterable_on
+    [:person_sourced_id]
+  end
 end

@@ -7,7 +7,16 @@ class LisController < ActionController::Base
   include SslRequirement
   #  ssl_required :index, :show, :update, :delete  #Comment out to pass specs, uncomment for security in production
   def index
-    objects = model.all
+    active_filters = filterable_on.select{|filter| params[filter]}
+    if active_filters.size > 1
+      render :xml => "Cannot have more than one filter", :status => :unprocessable_entity
+      return
+    end
+    if active_filters.size == 1
+      objects = model.send("find_all_by_" +active_filters[0].to_s, params[active_filters[0]])
+    else
+      objects = model.all
+    end
     render :xml => "<#{resource.pluralize}>\n#{objects.map{|object| "  #{object.to_xml}\n"}}\n</#{resource.pluralize}>"
   end
   def show
@@ -55,8 +64,8 @@ class LisController < ActionController::Base
     end
     object.destroy
     render :xml => "", :status => :no_content
-    rescue ActiveRecord::StatementInvalid => e
-      render :xml => e.message, :status => :unprocessable_entity
-      return    
+  rescue ActiveRecord::StatementInvalid => e
+    render :xml => e.message, :status => :unprocessable_entity
+    return
   end
 end

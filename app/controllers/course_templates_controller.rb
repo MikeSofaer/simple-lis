@@ -5,4 +5,7 @@ class CourseTemplatesController < LisController
   def resource
     "course_template"
   end
+  def filterable_on
+    []
+  end
 end

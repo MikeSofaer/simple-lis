@@ -5,4 +5,7 @@ class TermsController < LisController
   def resource
     "term"
   end
+  def filterable_on
+    [:person_sourced_id]
+  end
 end

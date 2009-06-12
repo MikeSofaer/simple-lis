@@ -5,4 +5,7 @@ class MeetingsController < LisController
   def resource
     "meeting"
   end
+  def filterable_on
+    [:target_sourced_id]
+  end
 end
