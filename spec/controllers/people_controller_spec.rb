@@ -109,7 +109,23 @@ describe PeopleController do
     end
   end
   describe "replication" do
-    it "should provide a URL to retrive the object"
+        before(:each) do
+      @xml = Hpricot("<people><person>
+  <sourced_id>bjones8</sourced_id>
+  <names>
+    <given>Bob</given>
+    <family>Jones</family>
+  </names>
+  <contact_info>
+    <email>bob@your_school.edu</email>
+  </contact_info>
+</person></people>")
+    end
+    it "should provide a URL to retrive the object" do
+      request.env['RAW_POST_DATA'] = @xml.to_s
+      put :update
+      response.body.should == "<url>http://test.host/people/bjones8</url>"
+    end
     it "URL provided should return an object"
     it "object returned should correctly reproduce XML"
   end

@@ -20,12 +20,19 @@ Data Types
 Simple LIS has 8 different kinds of objects that it understands
 
 People  -  These are people!
+
 Groups  -  Any collection of people that isn't a course section.  Departments, Colleges and football teams are all groups
+
 Terms  -  These are what transcripts are divided up into, and what people pay tuition by!
+
 Course Templates  -  The basic concept of a course, such as Anthropology 2A
+
 Course Offerings  -  A course template being offered in a term, by a group.  Anthropology department offering Anthropology 2A in Spring 2011
+
 Course Sections  -  A course offering has one or more of these of various kinds, lectures, labs, practica, etc.
+
 Meetings  -  Course Sections and Groups can have meetings scheduled at regular intervals.
+
 Memberships  -  These associate people with groups and course sections, with a role
 
 Between these 8 kinds of objects, most use cases can be covered.
