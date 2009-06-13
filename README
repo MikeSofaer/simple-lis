@@ -1,37 +1,69 @@
 Simple LIS
 A Powerful, Open, and above all, Easy data standard for Education
 
-Full Specification Document:  http://github.com/MikeSofaer/simple-lis/raw/master/Simple_LIS_Specification.pdf
+Full Specification Document:  
+http://github.com/MikeSofaer/simple-lis/raw/master/Simple_LIS_Specification.pdf
 
 Introduction
 
-Simple LIS (Learner Information Services) was created to make it easy for an educational institution to inter-operate with trusted third party services.  The potential for tools to help people learn, or form lasting social and academic connections is huge.  Simple LIS is designed to make it straightforward to publish data in real time to any tool that you judge useful, without spending developer time on a custom integration.
+Simple LIS (Learner Information Services) was created to make it easy for an 
+educational institution to inter-operate with trusted third party services.  The 
+potential for tools to help people learn, or form lasting social and academic 
+connections is huge.  Simple LIS is designed to make it straightforward to publish 
+data in real time to any tool that you judge useful, without spending developer 
+time on a custom integration.
 
-Educational applications are notorious for not playing well with others.  When we talked to schools about open standards and interoperability, we found that people simply don't believe that open standards will ever really exist.  We decided to get off on the right foot, by not only publishing the data integration model we use, but open-sourcing the integration server itself.  Our Chief Architect spent some time with the IMS Global LIS working group, and put together a highly simplified version of LIS that is straightforward to implement, and we are committed to working with schools and SIS vendors on creating a library of solutions for SIS endpoints so that the Simple LIS standard is turnkey.
+Educational applications are notorious for not playing well with others.  When we 
+talked to schools about open standards and interoperability, we found that people 
+simply don't believe that open standards will ever really exist.  We decided to 
+get off on the right foot, by not only publishing the data integration model we 
+use, but open-sourcing the integration server itself.  Our Chief Architect spent 
+some time with the IMS Global LIS working group, and put together a highly 
+simplified version of LIS that is straightforward to implement, and we are 
+committed to working with schools and SIS vendors on creating a library of 
+solutions for SIS endpoints so that the Simple LIS standard is turnkey.
 
-Simple LIS is about connecting people to the various educational objects they need to be connected to.  Most fundamentally, it is about people and Course Sections (a term from IMS Global's full LIS spec), which are what people enroll in, and go to to learn things (well, sometimes not the morning ones.)
+Simple LIS is about connecting people to the various educational objects they need 
+to be connected to.  Most fundamentally, it is about people and Course Sections (a 
+term from IMS Global's full LIS spec), which are what people enroll in, and go to 
+to learn things (well, sometimes not the morning ones.)
 
 Why a New Standard?
-There are already standards for educational data integration.  One of them was the model for Simple LIS.  So why do we need this?  Because those standards are too hard to implement.  They tend to be very complex, to support a huge range of possible data.  They tend to be SOAP-based, which is a large barrier to entry.  They don't make life all that much easier on the people who have to make it all work.
+There are already standards for educational data integration.  One of them was the 
+model for Simple LIS.  So why do we need this?  Because those standards are too 
+hard to implement.  They tend to be very complex, to support a huge range of 
+possible data.  They tend to be SOAP-based, which is a large barrier to entry.  
+They don't make life all that much easier on the people who have to make it all 
+work.
 
-Simple LIS is a very easy standard to implement, it's designed to remove the data integration barrier for a tool provider, so that people who want to make educational tools can make them without worrying about integration.  We found that the existing standards had been designed by large companies to support the huge set of things they wanted to do, rather than being focused on small projects and making it easy to do a few basic things.
+Simple LIS is a very easy standard to implement, it's designed to remove the data 
+integration barrier for a tool provider, so that people who want to make 
+educational tools can make them without worrying about integration.  We found that 
+the existing standards had been designed by large companies to support the huge 
+set of things they wanted to do, rather than being focused on small projects and 
+making it easy to do a few basic things.
 
 Data Types
 Simple LIS has 8 different kinds of objects that it understands
 
 People  -  These are people!
 
-Groups  -  Any collection of people that isn't a course section.  Departments, Colleges and football teams are all groups
+Groups  -  Any collection of people that isn't a course section.  Departments, 
+Colleges and football teams are all groups
 
-Terms  -  These are what transcripts are divided up into, and what people pay tuition by!
+Terms  -  These are what transcripts are divided up into, and what people pay 
+tuition by!
 
 Course Templates  -  The basic concept of a course, such as Anthropology 2A
 
-Course Offerings  -  A course template being offered in a term, by a group.  Anthropology department offering Anthropology 2A in Spring 2011
+Course Offerings  -  A course template being offered in a term, by a group.  
+Anthropology department offering Anthropology 2A in Spring 2011
 
-Course Sections  -  A course offering has one or more of these of various kinds, lectures, labs, practica, etc.
+Course Sections  -  A course offering has one or more of these of various kinds, 
+lectures, labs, practica, etc.
 
-Meetings  -  Course Sections and Groups can have meetings scheduled at regular intervals.
+Meetings  -  Course Sections and Groups can have meetings scheduled at regular 
+intervals.
 
 Memberships  -  These associate people with groups and course sections, with a role
 
@@ -39,18 +71,36 @@ Between these 8 kinds of objects, most use cases can be covered.
 
 For example, a University might provide:
 A set of people at the university, and a single term.
-A set of Colleges using Groups, and memberships to them as students or faculty, to describe who is who.
+A set of Colleges using Groups, and memberships to them as students or faculty, to 
+describe who is who.
 A set of departments using Groups
-A set of Residence halls using Groups, and memberships to them with roles like 'Resident' 'RA' and 'RD' to allow interesting and safe residence functionality in a tool.
-A set of Course Templates, Course Offerings, Course Sections and Meetings, to describe the course catalog
-A set of memberships to Course Sections with roles like 'Instructor', 'Student' and 'TeachingAssistant'
+A set of Residence halls using Groups, and memberships to them with roles like 
+'Resident' 'RA' and 'RD' to allow interesting and safe residence functionality in 
+a tool.
+A set of Course Templates, Course Offerings, Course Sections and Meetings, to 
+describe the course catalog
+A set of memberships to Course Sections with roles like 'Instructor', 'Student' 
+and 'TeachingAssistant'
 
-Then a tool could not only provide tools for classes, it could provide tools for dorms, and allow RAs and RDs to have special privileges (moderation, maybe tools to offer help/support).  The more data a University wants to send, the more an application can do for students.
+Then a tool could not only provide tools for classes, it could provide tools for 
+dorms, and allow RAs and RDs to have special privileges (moderation, maybe tools 
+to offer help/support).  The more data a University wants to send, the more an 
+application can do for students.
 Why You Should Use Simple LIS
-Simple LIS is easy.  Your developers can implement it quickly, and the tool builders can also implement it quickly.
+Simple LIS is easy.  Your developers can implement it quickly, and the tool 
+builders can also implement it quickly.
 
-Simple LIS is open.  There is already a full reference server publicly available, and Inigral uses it as the baseline for all integrations.
+Simple LIS is open.  There is already a full reference server publicly available, 
+and Inigral uses it as the baseline for all integrations.
 
-Simple LIS is based on a more complex accepted standard.  IMS Global's LIS standard will be supported by Oracle, Blackboard, Angel, Moodle and Sakai, among other groups.  A Simple LIS implementation is a good step on the way to a full LIS implementation, the data structures are very similar and only the SOAP binding is missing.  It is also easy to create a Simple LIS interface if you have an LIS implementation already.
+Simple LIS is based on a more complex accepted standard.  IMS Global's LIS 
+standard will be supported by Oracle, Blackboard, Angel, Moodle and Sakai, among 
+other groups.  A Simple LIS implementation is a good step on the way to a full LIS 
+implementation, the data structures are very similar and only the SOAP binding is 
+missing.  It is also easy to create a Simple LIS interface if you have an LIS 
+implementation already.
 
-Simple LIS is already operating as a real-time data integration service at Arizona State University.  As users join the Inigral Schools on Facebook deployment at ASU, the data is provisioned by ASU for each one as he joins.  Live schedule updating as a student adds and drops classes is as easy as possible.
+Simple LIS is already operating as a real-time data integration service at Arizona 
+State University.  As users join the Inigral Schools on Facebook deployment at 
+ASU, the data is provisioned by ASU for each one as he joins.  Live schedule 
+updating as a student adds and drops classes is as easy as possible.
