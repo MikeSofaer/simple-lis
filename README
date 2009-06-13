@@ -1,6 +1,8 @@
 Simple LIS
 A Powerful, Open, and above all, Easy data standard for Education
 
+Full Specification Document:  http://github.com/MikeSofaer/simple-lis/raw/master/Simple_LIS_Specification.pdf
+
 Introduction
 
 Simple LIS (Learner Information Services) was created to make it easy for an educational institution to inter-operate with trusted third party services.  The potential for tools to help people learn, or form lasting social and academic connections is huge.  Simple LIS is designed to make it straightforward to publish data in real time to any tool that you judge useful, without spending developer time on a custom integration.
