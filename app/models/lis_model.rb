@@ -1,7 +1,12 @@
 class LISModel
   include SAXMachine
   include SAXSaver
-  
+
+    def optional_xml(field)
+    value = self.send(field)
+    return unless value
+    "<#{field}>#{value}</#{field}>"
+  end
 end
 
 class LISContainer

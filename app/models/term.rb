@@ -1,10 +1,11 @@
-class Term
-  include SAXMachine
-  include SAXSaver
+class Term < LISModel
+
   element :sourced_id, :required => true
   element :title, :required => true
   element :starts_at
   element :ends_at
+
+  @@containter = "Terms"
   
   def to_xml
     "<term>
@@ -16,13 +17,7 @@ class Term
   end
 end
 
-class Terms
-  include SAXMachine
-  include SAXSaver
+class Terms < LISContainer
   elements :term, :as => :terms, :class => Term
-  def to_xml
-"<terms> " + @terms.map(&:to_xml).join("\n") + "
-</terms>"
-  end
 end
 
