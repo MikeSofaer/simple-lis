@@ -2,7 +2,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe PeopleController do
   describe "get requests" do
     before(:each) do
-      Factory(:person, :sourced_id => "bobjones1")
+      p = Factory.build(:person, :sourced_id => "bobjones1")
+      pe = People.new
+      pe.people = [p]
+      pe.save!
     end
     it "should return a list of people on index" do
       get :index
