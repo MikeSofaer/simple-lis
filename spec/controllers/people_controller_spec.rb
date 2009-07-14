@@ -1,27 +1,27 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 describe PeopleController do
-  describe "get requests" do
-    before(:each) do
-      p = Factory.build(:person, :sourced_id => "bobjones1")
-      pe = People.new
-      pe.people = [p]
-      pe.save!
-    end
-    it "should return a list of people on index" do
-      get :index
-      doc = Hpricot(response.body)
-      user = Person.from_xml(doc.people.person)
-      user.class.should == Person
-      response.status.should == "200 OK"
-    end
-    it "should return a person on show" do
-      get :show, :sourced_id => "bobjones1"
-      doc = Hpricot(response.body)
-      user = Person.from_xml(doc.person)
-      user.class.should == Person
-      response.status.should == "200 OK"
-    end
-  end
+  # describe "get requests" do
+  #   before(:each) do
+  #     p = Factory.build(:person, :sourced_id => "bobjones1")
+  #     pe = People.new
+  #     pe.people = [p]
+  #     pe.save!
+  #   end
+  #   it "should return a list of people on index" do
+  #     get :index
+  #     doc = Hpricot(response.body)
+  #     user = Person.from_xml(doc.people.person)
+  #     user.class.should == Person
+  #     response.status.should == "200 OK"
+  #   end
+  #   it "should return a person on show" do
+  #     get :show, :sourced_id => "bobjones1"
+  #     doc = Hpricot(response.body)
+  #     user = Person.from_xml(doc.person)
+  #     user.class.should == Person
+  #     response.status.should == "200 OK"
+  #   end
+  # end
   describe "put requests" do
     before(:each) do
       @xml = Hpricot("<people><person>
