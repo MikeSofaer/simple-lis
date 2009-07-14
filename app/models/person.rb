@@ -18,15 +18,24 @@ class Person
   </contact_info>
 </person>"
   end
+  
+  class AR < ActiveRecord::Base
+    self.table_name = self.parent_name.tableize
+    
+    def to_xml_with_ar
+      to_xml_without_ar(:root => self.class.parent_name)
+    end
+    alias_method_chain :to_xml, :ar
+  end
 end
 
 class People
   include SAXMachine
   include SAXSaver
   elements :person, :as => :people, :class => Person
-  def to_xml
-"<people> " + @people.map(&:to_xml).join("\n") + "
-</people>"
-  end
 
+  def to_xml
+%Q{<people> #{@people.map(&:to_xml) * "\n"}
+</people>}
+  end
 end
