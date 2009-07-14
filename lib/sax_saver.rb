@@ -39,7 +39,6 @@ module SAXSaver
   class MissingElementError < Exception; end
   def self.included(base)
     base.extend SaverMethods
-    base.cattr_reader :container
   end
   module SaverMethods
     def columns
@@ -65,18 +64,21 @@ module SAXSaver
     ret = "INSERT INTO #{self.class.table_name} (#{columns.join(', ')}) values "
     values = send(self.class.table_name).map do |object|
       col_vals = columns.map{|c| object.send(c)}
-      col_vals.map!{|c| c ? "'" + c + "'" : 'NULL'}
+      col_vals.map!{|c| c ? "'" + c.to_s + "'" : 'NULL'}
       '(' + col_vals.join(', ') + ')'
     end
     ret + values.join(', ')
   end
   def save!
+    p self
+    p self.class
+    p self.class.container
     return save_with(self.class.container.constantize) if self.class.container
     self.class.connection.execute sql
   end
   def save_with(container_class)
     c = container_class.new
-    c.send(container_class.collection = [self])
+    c.collection = [self]
     c.save!
   end
   def validate

@@ -1,5 +1,5 @@
 class CourseTemplate < LISModel
- @@container = "CourseTemplates"
+
  element :sourced_id, :required => true
  element :title, :required => true
  element :code, :required => true

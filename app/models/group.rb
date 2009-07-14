@@ -1,7 +1,5 @@
 class Group < LISModel
 
- @@container = "Groups"
-
  element :sourced_id, :require => true
  element :title, :required => true
  element :category, :required => true
