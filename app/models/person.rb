@@ -3,10 +3,10 @@ require 'sax_saver'
 class Person
   include SAXMachine
   include SAXSaver
-  element :sourced_id
-  element :given, :as => :given_name
-  element :family, :as => :family_name
-  element :email
+  element :sourced_id, :required => true
+  element :given, :as => :given_name, :required => true
+  element :family, :as => :family_name, :required => true
+  element :email, :required => true
 
   def to_xml
 "<person>
