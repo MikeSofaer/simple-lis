@@ -1,5 +1,6 @@
 require 'sax-machine'
 require "sax-machine/sax_element_config"
+require 'active_record'
 module SAXMachine
   class SAXConfig
     class ElementConfig
@@ -63,13 +64,22 @@ module SAXSaver
     ret = "INSERT INTO #{self.class.table_name} (#{columns.join(', ')}) values "
     values = send(self.class.table_name).map do |object|
       col_vals = columns.map{|c| object.send(c)}
-      col_vals.map!{|c| c ? "'" + c + "'" : 'NULL'}
+      col_vals.map!{|c| c ? "'" + c.to_s + "'" : 'NULL'}
       '(' + col_vals.join(', ') + ')'
     end
     ret + values.join(', ')
   end
   def save!
+    p self
+    p self.class
+    p self.class.container
+    return save_with(self.class.container.constantize) if self.class.container
     self.class.connection.execute sql
+  end
+  def save_with(container_class)
+    c = container_class.new
+    c.collection = [self]
+    c.save!
   end
   def validate
     self.class.instance_variable_get('@sax_config').instance_variable_get('@top_level_elements').select{|e| e.required}.each do |element|
@@ -79,4 +89,13 @@ module SAXSaver
     end
     send(self.class.table_name).each{|o| o.validate} if self.class.table_name
   end
+  def table_name
+    self.class.table_name
+  end
+    def collection
+      send(table_name)
+    end
+    def collection=(values)
+      send(table_name + '=', values)
+    end
 end

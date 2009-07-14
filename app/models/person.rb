@@ -1,6 +1,5 @@
-class Person
-  include SAXMachine
-  include SAXSaver
+class Person < LISModel
+
   element :sourced_id, :required => true
   element :given, :as => :given_name, :required => true
   element :family, :as => :family_name, :required => true
@@ -19,23 +18,16 @@ class Person
 </person>"
   end
   
-  class AR < ActiveRecord::Base
-    self.table_name = self.parent_name.tableize
-    
-    def to_xml_with_ar
-      to_xml_without_ar(:root => self.class.parent_name)
-    end
-    alias_method_chain :to_xml, :ar
-  end
+  # class AR < ActiveRecord::Base
+  #   self.table_name = self.parent_name.tableize
+  #   
+  #   def to_xml_with_ar
+  #     to_xml_without_ar(:root => self.class.parent_name)
+  #   end
+  #   alias_method_chain :to_xml, :ar
+  # end
 end
 
-class People
-  include SAXMachine
-  include SAXSaver
+class People < LISContainer
   elements :person, :as => :people, :class => Person
-
-  def to_xml
-%Q{<people> #{@people.map(&:to_xml) * "\n"}
-</people>}
-  end
 end

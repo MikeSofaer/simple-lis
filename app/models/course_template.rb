@@ -1,10 +1,9 @@
-class CourseTemplate < ActiveRecord::Base
-  def self.from_xml(doc)
-    new(:sourced_id => doc.sourced_id,
-    :title => doc.title,
-    :description => doc.optional(:description),
-    :code => doc.code)
-  end
+class CourseTemplate < LISModel
+
+ element :sourced_id, :required => true
+ element :title, :required => true
+ element :code, :required => true
+ element :description
   def to_xml
     "<course_template>
     <sourced_id>#{sourced_id}</sourced_id>
@@ -13,4 +12,8 @@ class CourseTemplate < ActiveRecord::Base
     <code>#{code}</code>
     </course_template>"
   end
+end
+
+class CourseTemplates < LISContainer
+  elements :course_template, :as => :course_templates, :class => CourseTemplate
 end
