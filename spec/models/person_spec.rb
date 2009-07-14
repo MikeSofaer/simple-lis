@@ -40,20 +40,19 @@ describe "Person" do
       end
       it "should fail without a given name" do
         @xml.at('given').remove
-        people = People.parse(@xml.to_s)
-        lambda{people.save!}.should raise_error(ActiveRecord::StatementInvalid)
+        lambda{People.parse(@xml.to_s)}.should raise_error(SAXSaver::MissingElementError)
       end
       it "should fail without a family name" do
         @xml.at('family').remove
-        lambda{People.parse(@xml.to_s).save!}.should raise_error(ActiveRecord::StatementInvalid)
+        lambda{People.parse(@xml.to_s)}.should raise_error(SAXSaver::MissingElementError)
       end
       it "should fail without an email" do
         @xml.at('email').remove
-        lambda{People.parse(@xml.to_s).save!}.should raise_error(ActiveRecord::StatementInvalid)
+        lambda{People.parse(@xml.to_s)}.should raise_error(SAXSaver::MissingElementError)
       end
       it "should fail without a sourced_id" do
         @xml.at('sourced_id').remove
-        lambda{People.parse(@xml.to_s).save!}.should raise_error(ActiveRecord::StatementInvalid)
+        lambda{People.parse(@xml.to_s)}.should raise_error(SAXSaver::MissingElementError)
       end
     end
   end

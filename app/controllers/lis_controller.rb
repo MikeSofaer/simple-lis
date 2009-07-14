@@ -1,4 +1,4 @@
-require 'hpricot_prettifier'
+#require 'hpricot_prettifier'
 require 'ar-extensions'
 require 'ar-extensions/adapters/mysql'
 require 'ar-extensions/import/mysql'
