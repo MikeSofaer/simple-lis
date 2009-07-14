@@ -1,9 +1,8 @@
 class Person
   include SAXMachine
   include SAXSaver
-  cattr_reader :container
 
-  @@container = :People
+  @@container = "People"
   element :sourced_id, :required => true
   element :given, :as => :given_name, :required => true
   element :family, :as => :family_name, :required => true

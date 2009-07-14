@@ -1,5 +1,6 @@
 require 'sax-machine'
 require "sax-machine/sax_element_config"
+require 'active_record'
 module SAXMachine
   class SAXConfig
     class ElementConfig
@@ -38,6 +39,7 @@ module SAXSaver
   class MissingElementError < Exception; end
   def self.included(base)
     base.extend SaverMethods
+    base.cattr_reader :container
   end
   module SaverMethods
     def columns
