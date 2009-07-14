@@ -7,19 +7,19 @@ describe "Person" do
 
   describe "generated XML" do
     before(:each) do
-      @xml = Hpricot(@person.to_xml).person
+      @xml = Nokogiri(@person.to_xml)
     end
     it "should contain the correct given name" do
-      @xml.names.given.should_not be_nil
-      @xml.names.given.should == @person.given_name
+      @xml.given.should_not be_nil
+      @xml.given.should == @person.given_name
     end
     it "should contain the correct family name" do
-      @xml.names.family.should_not be_nil
-      @xml.names.family.should == @person.family_name
+      @xml.family.should_not be_nil
+      @xml.family.should == @person.family_name
     end
     it "should contain the correct email" do
-      @xml.contact_info.email.should_not be_nil
-      @xml.contact_info.email.should == @person.email
+      @xml.email.should_not be_nil
+      @xml.email.should == @person.email
     end
     it "should contain the correct sourced_id" do
       @xml.sourced_id.should_not be_nil
@@ -29,26 +29,32 @@ describe "Person" do
 
   describe "generation from XML" do
     before(:each) do
-      @xml = Hpricot(@person.to_xml).person
+      @xml = '<people>' + @person.to_xml + '</people>'
     end
     it "should create a saveable Person from a valid XML" do
-      Person.from_xml(@xml).save!
+      People.parse(@xml).save!
     end
-    it "should fail without a given name" do
-      @xml.search('given').remove
-      lambda{Person.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
-    end
-    it "should fail without a family name" do
-      @xml.search('family').remove
-      lambda{Person.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
-    end
-    it "should fail without an email" do
-      @xml.search('email').remove
-      lambda{Person.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
-    end
-    it "should fail without a sourced_id" do
-      @xml.search('sourced_id').remove
-      lambda{Person.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+    describe 'failure states' do
+      before(:each) do
+        @xml = Nokogiri(@xml)
+      end
+      it "should fail without a given name" do
+        @xml.at('given').remove
+        people = People.parse(@xml.to_s)
+        lambda{people.save!}.should raise_error(ActiveRecord::StatementInvalid)
+      end
+      it "should fail without a family name" do
+        @xml.at('family').remove
+        lambda{People.parse(@xml.to_s).save!}.should raise_error(ActiveRecord::StatementInvalid)
+      end
+      it "should fail without an email" do
+        @xml.at('email').remove
+        lambda{People.parse(@xml.to_s).save!}.should raise_error(ActiveRecord::StatementInvalid)
+      end
+      it "should fail without a sourced_id" do
+        @xml.at('sourced_id').remove
+        lambda{People.parse(@xml.to_s).save!}.should raise_error(ActiveRecord::StatementInvalid)
+      end
     end
   end
 end

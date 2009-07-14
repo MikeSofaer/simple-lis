@@ -1,12 +1,13 @@
-class Person < ActiveRecord::Base
-  validates_uniqueness_of :email  #This is to make the exception pretty for the response
-  def self.from_xml(doc)
-    new(
-      :sourced_id => doc.sourced_id,
-      :given_name => doc.names.given,
-      :family_name => doc.names.family,
-      :email => doc.contact_info.email)
-  end
+require 'nokogiri_prettifier'
+require 'sax_saver'
+class Person
+  include SAXMachine
+  include SAXSaver
+  element :sourced_id
+  element :given, :as => :given_name
+  element :family, :as => :family_name
+  element :email
+
   def to_xml
 "<person>
   <sourced_id>#{sourced_id}</sourced_id>
@@ -19,4 +20,15 @@ class Person < ActiveRecord::Base
   </contact_info>
 </person>"
   end
+end
+
+class People
+  include SAXMachine
+  include SAXSaver
+  elements :person, :as => :people, :class => Person
+  def to_xml
+"<people> " + @people.map(&:to_xml).join("\n") + "
+</people>"
+  end
+
 end
