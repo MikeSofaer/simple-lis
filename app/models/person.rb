@@ -1,6 +1,4 @@
-class Person
-  include SAXMachine
-  include SAXSaver
+class Person < LISModel
 
   @@container = "People"
   element :sourced_id, :required => true
@@ -22,13 +20,6 @@ class Person
   end
 end
 
-class People
-  include SAXMachine
-  include SAXSaver
+class People < LISContainer
   elements :person, :as => :people, :class => Person
-  def to_xml
-"<people> " + @people.map(&:to_xml).join("\n") + "
-</people>"
-  end
-
 end

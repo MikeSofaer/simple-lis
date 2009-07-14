@@ -54,6 +54,12 @@ module SAXSaver
     def connection
       ActiveRecord::Base.connection
     end
+    def collection
+      send(table_name)
+    end
+    def collection=(values)
+      send(table_name + '=', values)
+    end
     def parse(xml)
       ret = super(xml)
       ret.validate
@@ -76,7 +82,7 @@ module SAXSaver
   end
   def save_with(container_class)
     c = container_class.new
-    c.send(container_class.table_name + '=', [self])
+    c.send(container_class.collection = [self])
     c.save!
   end
   def validate
