@@ -32,23 +32,23 @@ describe "CourseOffering" do
       @xml = Hpricot(@offering.to_xml).course_offering
     end
     it "should create a saveable Template from a valid XML" do
-      CourseOffering.from_xml(@xml).save!
+      CourseOffering.parse(@xml.to_s).save!
     end
     it "should fail without a template" do
       @xml.search('course_template_sourced_id').remove
-      lambda{CourseOffering.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
     end
     it "should fail without a term" do
       @xml.search('term_sourced_id').remove
-      lambda{CourseOffering.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
     end
     it "should not fail without a group" do
       @xml.search('group_sourced_id').remove
-      lambda{CourseOffering.from_xml(@xml).save!}.should_not raise_error(Hpricot::MissingFieldError)
+      lambda{CourseOffering.parse(@xml.to_s).save!}.should_not raise_error(SAXSaver::MissingElementError)
     end
     it "should fail without a sourced_id" do
       @xml.search('sourced_id').remove
-      lambda{CourseOffering.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
     end
   end
 end

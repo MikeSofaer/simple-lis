@@ -10,14 +10,14 @@ describe PeopleController do
     it "should return a list of people on index" do
       get :index
       doc = Hpricot(response.body)
-      user = Person::AR.from_xml(doc.people.person)
+      user = Person.from_xml(doc.people.person)
       user.class.should == Person
       response.status.should == "200 OK"
     end
     it "should return a person on show" do
       get :show, :sourced_id => "bobjones1"
       doc = Hpricot(response.body)
-      user = Person::AR.from_xml(doc.person)
+      user = Person.from_xml(doc.person)
       user.class.should == Person
       response.status.should == "200 OK"
     end
@@ -57,7 +57,7 @@ describe PeopleController do
       
       request.env['RAW_POST_DATA'] = @xml.to_s
       go = lambda{put :update}
-      go.should change(Person::AR, :count).by(1)
+      go.should change(Person, :count).by(1)
       response.status.should == "200 OK"
     end
 
@@ -91,7 +91,7 @@ describe PeopleController do
   </contact_info>
 </person></people>"
       go = lambda{put :update}
-      go.should change(Person::AR, :count).by(2)
+      go.should change(Person, :count).by(2)
       response.status.should == "200 OK"
     end
 
@@ -116,12 +116,12 @@ describe PeopleController do
 
     it "should succeed with a good sourced_id" do
       go = lambda{delete :delete, :sourced_id => "bobjones1"}
-      go.should change(Person::AR, :count).by(-1)
+      go.should change(Person, :count).by(-1)
       response.status.should == "204 No Content"
     end
 
     it "should delete the person's memberships" do
-      Factory(:membership, :person => Person::AR.find_by_sourced_id("bobjones1"))
+      Factory(:membership, :person => Person.find_by_sourced_id("bobjones1"))
       go = lambda{delete :delete, :sourced_id => "bobjones1"}
       go.should change(Membership, :count).by(-1)
       response.status.should == "204 No Content"

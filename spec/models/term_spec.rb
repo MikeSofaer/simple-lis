@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../spec_helper'
+
 describe "Term" do
   before(:each) do
     @term = Factory.build(:term)

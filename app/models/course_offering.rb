@@ -4,7 +4,7 @@ class CourseOffering < LISModel
   belongs_to :group, :foreign_key => :group_sourced_id, :reference_column => 'sourced_id'
 =end
  @@container = "CourseOfferings"
- element :sourced_id, :require => true
+ element :sourced_id, :required => true
  element :term_sourced_id, :required => true
  element :course_template_sourced_id, :required => true
  element :group_sourced_id
@@ -29,6 +29,6 @@ class CourseOffering < LISModel
 end
 
 class CourseOfferings < LISContainer
-  elements :course_offerings, :as => :course_offeringss, :class => CourseOffering
+  elements :course_offerings, :as => :course_offerings, :class => CourseOffering
 end
 
