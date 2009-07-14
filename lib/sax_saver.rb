@@ -69,7 +69,13 @@ module SAXSaver
     ret + values.join(', ')
   end
   def save!
+    return save_with(self.class.container.constantize) if self.class.container
     self.class.connection.execute sql
+  end
+  def save_with(container_class)
+    c = container_class.new
+    c.send(container_class.table_name + '=', [self])
+    c.save!
   end
   def validate
     self.class.instance_variable_get('@sax_config').instance_variable_get('@top_level_elements').select{|e| e.required}.each do |element|
