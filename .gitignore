@@ -1,2 +1,8 @@
 log/*
 nbproject
+.DS_Store
+coverage/*
+coverage.data
+db/schema.rb
+log/*.log
+tmp/*
