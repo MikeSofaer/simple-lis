@@ -1,5 +1,5 @@
 require 'hpricot'
-
+require 'active_record'
 module Hpricot
   class MissingFieldError < Hpricot::Error #:nodoc:
   end

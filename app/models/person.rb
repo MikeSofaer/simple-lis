@@ -1,5 +1,3 @@
-require 'nokogiri_prettifier'
-require 'sax_saver'
 class Person
   include SAXMachine
   include SAXSaver

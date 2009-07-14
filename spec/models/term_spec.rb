@@ -30,23 +30,23 @@ describe "Term" do
       @xml = Hpricot(@term.to_xml).term
     end
     it "should create a saveable term from a valid XML" do
-      Term.from_xml(@xml).save!
+      Terms.parse(@xml.to_s).save!
     end
     it "should fail without a title" do
       @xml.search('title').remove
-      lambda{Term.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+      lambda{Terms.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
     end
     it "should not fail without a starts_at" do
       @xml.search('starts_at').remove
-      lambda{Term.from_xml(@xml).save!}.should_not raise_error(Hpricot::MissingFieldError)
+      Terms.parse(@xml.to_s).save!
     end
     it "should not fail without an ends_at" do
       @xml.search('ends_at').remove
-      lambda{Term.from_xml(@xml).save!}.should_not raise_error(Hpricot::MissingFieldError)
+      Terms.parse(@xml.to_s).save!
     end
     it "should fail without a sourced_id" do
       @xml.search('sourced_id').remove
-      lambda{Term.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+      lambda{Terms.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
     end
   end
 end
