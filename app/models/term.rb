@@ -2,8 +2,8 @@ class Term < LISModel
 
   element :sourced_id, :required => true
   element :title, :required => true
-  element :starts_at
-  element :ends_at
+  element :starts_at, :db_type => DateTime
+  element :ends_at, :db_type => DateTime
   
   def to_xml
     "<term>

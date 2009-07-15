@@ -11,12 +11,15 @@ class CourseOffering < LISModel
   def course_template=(template)
     self.course_template_sourced_id = template.sourced_id
   end
+  
   def term=(term)
     self.term_sourced_id = term.sourced_id
   end
+  
   def group=(group)
     self.group_sourced_id = group.sourced_id
   end
+  
   def to_xml
     "<course_offering>
     <sourced_id>#{sourced_id}</sourced_id>

@@ -1,11 +1,12 @@
 class Group < LISModel
 
- element :sourced_id, :required => true
- element :title, :required => true
- element :category, :required => true
- element :sub_category, :required => true
- element :description
- element :parent_sourced_id
+  element :sourced_id, :required => true
+  element :title, :required => true
+  element :category, :required => true
+  element :sub_category, :required => true
+  element :description
+  element :parent_sourced_id
+
   def to_xml
     "<group>
     <sourced_id>#{sourced_id}</sourced_id>
@@ -16,6 +17,7 @@ class Group < LISModel
     #{optional_xml(:parent_sourced_id)}
     </group>"
   end
+  
   def parent=(parent)
     self.parent_sourced_id = parent.sourced_id
   end
