@@ -87,11 +87,11 @@ module SAXSaver
     ret = "INSERT INTO #{self.class.table_name} (#{columns.join(', ')}) values "
     values = send(self.class.table_name).map do |object|
       col_vals = columns.map{|c| object.send(c)}
-      col_vals.map!{|c| c.is_a?(DateTime) ? c.strftime("%Y-%m-%d %H:%M:%S") : c}
-      col_vals.map!{|c| c ? "'" + c.to_s + "'" : 'NULL'}
+      col_vals.map!{ |c| c.is_a?(DateTime) ? "'" + c.strftime("%Y-%m-%d %H:%M:%S") + "'" : (c ? "'" + CGI.escape(c.to_s) + "'" : 'NULL') }
+      # col_vals.map!{|c| c ? "'" + c.to_s + "'" : 'NULL'}
       update_columns = columns - [:sourced_id, :id, :created_at]
       update_keys = update_columns.map{|c| c.to_s + '=VALUES(' + c.to_s + ')'}
-      '(' + col_vals.join(', ') + ')' + "ON DUPLICATE KEY UPDATE " + update_keys.join(', ')
+      '(' + col_vals.join(', ') + ')' + " ON DUPLICATE KEY UPDATE " + update_keys.join(', ')
     end
     ret + values.join(', ')
   end

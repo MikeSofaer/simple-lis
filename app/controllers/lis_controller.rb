@@ -1,8 +1,3 @@
-#require 'hpricot_prettifier'
-require 'ar-extensions'
-require 'ar-extensions/adapters/mysql'
-require 'ar-extensions/import/mysql'
-
 class LisController < ActionController::Base
   include SslRequirement
   #  ssl_required :index, :show, :update, :delete  #Comment out to pass specs, uncomment for security in production
@@ -59,7 +54,7 @@ class LisController < ActionController::Base
     end
     object.destroy
     render :xml => "", :status => :no_content
-  rescue ActiveRecord::StatementInvalid => e
+  rescue MysqlError => e
     render :xml => e.message, :status => :unprocessable_entity and return
   end
 end
