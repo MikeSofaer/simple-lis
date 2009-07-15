@@ -4,8 +4,6 @@ class Term < LISModel
   element :title, :required => true
   element :starts_at
   element :ends_at
-
-  containter = "Terms"
   
   def to_xml
     "<term>
