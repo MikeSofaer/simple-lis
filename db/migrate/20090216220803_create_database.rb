@@ -8,7 +8,7 @@ class CreateDatabase < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
     end
-
+    add_index "people", ["email"], :name => "index_people_on_email"
     add_index "people", ["sourced_id"], :name => "index_people_on_sourced_id", :unique => true
 
     create_table "course_templates", :force => true do |t|
