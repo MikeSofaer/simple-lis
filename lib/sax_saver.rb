@@ -87,7 +87,7 @@ module SAXSaver
     ret = "INSERT INTO #{self.class.table_name} (#{columns.join(', ')}) values "
     values = send(self.class.table_name).map do |object|
       col_vals = columns.map{|c| object.send(c)}
-      col_vals.map!{ |c| c.is_a?(DateTime) ? "'" + c.to_s(:db) + "'" : (c ? "'" + CGI.escape(c.to_s) + "'" : 'NULL') }
+      col_vals.map!{ |c| c.is_a?(DateTime) ? "'" + c.to_s(:db) + "'" : (c ? "'" + c.to_s.gsub("'", "''") + "'" : 'NULL') }
       '(' + col_vals.join(', ') + ')'
     end
     update_columns = columns - [:sourced_id, :id, :created_at]

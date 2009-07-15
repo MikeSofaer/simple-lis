@@ -6,7 +6,7 @@ describe PeopleController do
     end
     
     it "should have built the person" do
-      Person.datamapper_class.all.size.should == 1
+      Person.datamapper_class.first(:sourced_id => "bobjones1").should_not be_nil
     end
     
     it "should return a list of people on index" do
@@ -59,8 +59,7 @@ describe PeopleController do
       pe.save!
       
       request.env['RAW_POST_DATA'] = @xml.to_s
-      go = lambda{put :update}
-      go.should change(Person.datamapper_class.all, :size).by(1)
+      lambda{ put :update }.should change(Person.datamapper_class, :count).by(1)
       response.status.should == "200 OK"
     end
 
@@ -94,7 +93,7 @@ describe PeopleController do
   </contact_info>
 </person></people>"
       go = lambda{put :update}
-      go.should change(Person.datamapper_class.all, :size).by(2)
+      go.should change(Person.datamapper_class, :count).by(2)
       response.status.should == "200 OK"
     end
 
@@ -102,9 +101,7 @@ describe PeopleController do
 
   describe "delete requests" do
     before(:each) do
-      pe = People.new
-      pe.people = [@person = Factory.build(:person, :sourced_id => "bobjones1")]
-      pe.save!
+      @person = Factory(:person, :sourced_id => "bobjones1")
     end
 
     it "should fail with no sourced_id" do
@@ -119,14 +116,14 @@ describe PeopleController do
 
     it "should succeed with a good sourced_id" do
       go = lambda{delete :delete, :sourced_id => "bobjones1"}
-      go.should change(Person.datamapper_class.all, :size).by(-1)
+      go.should change(Person.datamapper_class, :count).by(-1)
       response.status.should == "204 No Content"
     end
 
     it "should delete the person's memberships" do
-      Factory(:membership)#, :person => @person) #it gets stuck here, so commenting this out until we fix the factories
+      Factory(:membership, :person => @person) #it gets stuck here, so commenting this out until we fix the factories
       go = lambda{delete :delete, :sourced_id => "bobjones1"}
-      go.should change(Membership, :count).by(-1)
+      go.should change(Membership.datamapper_class, :count).by(-1)
       response.status.should == "204 No Content"
     end
   end
