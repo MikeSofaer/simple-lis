@@ -4,12 +4,14 @@ describe "Membership" do
   before(:each) do
     @membership = Factory.build(:membership)
   end
+
   describe "generation from XML" do
     before(:each) do
       @xml = Hpricot(@membership.to_xml).membership
     end
+
     it "should create a saveable Membership from a valid XML" do
-      Membership.from_xml(@xml).save!
+      Membership.parse(@xml.to_s).save!
     end
   end
 end

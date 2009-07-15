@@ -3,7 +3,7 @@ class Membership < LISModel
   element :target_sourced_id, :required => true
   element :target_type, :required => true
   element :person_sourced_id, :required => true
-  element :role, :required => true
+  element :role_name, :required => true, :as => :role
   element :starts_at, :db_type => DateTime
   element :ends_at, :db_type => DateTime
   
@@ -35,7 +35,7 @@ class Membership < LISModel
     <target_sourced_id>#{target_sourced_id}</target_sourced_id>
     <target_type>#{target_type}</target_type>
     <role>
-      <name>#{role}</name>
+      <role_name>#{role}</role_name>
       #{optional_xml(:starts_at)}
       #{optional_xml(:ends_at)}
     </role>

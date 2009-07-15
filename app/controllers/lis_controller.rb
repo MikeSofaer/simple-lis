@@ -10,7 +10,7 @@ class LisController < ActionController::Base
     end
 
     if active_filters.size == 1
-      objects = model.datamapper_class.first(active_filters[0].to_s.to_sym => params[active_filters[0]])
+      objects = model.datamapper_class.all(active_filters[0].to_s.to_sym => params[active_filters[0]])
     else
       objects = model.datamapper_class.all
     end
@@ -55,6 +55,10 @@ class LisController < ActionController::Base
     object.destroy
     render :xml => "", :status => :no_content
   rescue MysqlError => e
+    puts "raised MysqlError #{e.message}"
+    render :xml => e.message, :status => :unprocessable_entity and return
+  rescue Exception => e
+    puts "not a MysqlError error, instead it was a #{e.class.name}"
     render :xml => e.message, :status => :unprocessable_entity and return
   end
 end

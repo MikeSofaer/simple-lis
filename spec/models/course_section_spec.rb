@@ -29,31 +29,31 @@ describe "CourseSection" do
 
   describe "generation from XML" do
     before(:each) do
-      @xml = Hpricot(@section.to_xml).course_section
+      @xml = Hpricot(@section.to_xml).course_section.to_s
     end
     it "should create a saveable Section from a valid XML" do
-      CourseSection.from_xml(@xml).save!
+      CourseSection.parse(@xml).save!
     end
     it "should fail without an offering" do
       @xml.search('course_offering_sourced_id').remove
-      lambda{CourseSection.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+      lambda{CourseSection.parse(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
     end
     it "should fail without a label" do
       @xml.search('label').remove
-      lambda{CourseSection.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+      lambda{CourseSection.parse(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
     end
     it "should not fail without a description" do
       @xml.search('group_sourced_id').remove
-      lambda{CourseSection.from_xml(@xml).save!}.should_not raise_error(Hpricot::MissingFieldError)
+      lambda{CourseSection.parse(@xml).save!}.should_not raise_error(Hpricot::MissingFieldError)
     end
     it "should not generate a description tag if created with no description" do
-      Hpricot(CourseSection.from_xml(@xml).to_xml).search('description').blank?.should == false
+      Hpricot(CourseSection.parse(@xml).to_xml).search('description').blank?.should == false
       @xml.search('description').remove
-      Hpricot(CourseSection.from_xml(@xml).to_xml).search('description').blank?.should == true
+      Hpricot(CourseSection.parse(@xml).to_xml).search('description').blank?.should == true
     end
     it "should fail without a sourced_id" do
       @xml.search('sourced_id').remove
-      lambda{CourseSection.from_xml(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
+      lambda{CourseSection.parse(@xml).save!}.should raise_error(Hpricot::MissingFieldError)
     end
   end
 end
