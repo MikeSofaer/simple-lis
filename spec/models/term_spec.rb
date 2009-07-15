@@ -15,11 +15,11 @@ describe "Term" do
     end
     it "should contain the correct starts_at" do
       @xml.starts_at.should_not be_nil
-      @xml.starts_at.should == @term.starts_at.to_s
+      @xml.starts_at.should == @term.starts_at.strftime("%Y-%m-%d %H:%M:%S")
     end
     it "should contain the correct ends_at" do
       @xml.ends_at.should_not be_nil
-      @xml.ends_at.should == @term.ends_at.to_s
+      @xml.ends_at.should == @term.ends_at.strftime("%Y-%m-%d %H:%M:%S")
     end
     it "should contain the correct sourced_id" do
       @xml.sourced_id.should_not be_nil

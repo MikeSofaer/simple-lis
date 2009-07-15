@@ -1,6 +1,5 @@
 require 'sax-machine'
 require "sax-machine/sax_element_config"
-require 'active_record'
 module SAXMachine
   class SAXConfig
     class ElementConfig
@@ -62,7 +61,7 @@ module SAXSaver
     end
     
     def connection
-      ActiveRecord::Base.connection
+      DataMapper.repository(:default).adapter
     end
     
     def parse(xml)
@@ -88,8 +87,9 @@ module SAXSaver
     ret = "INSERT INTO #{self.class.table_name} (#{columns.join(', ')}) values "
     values = send(self.class.table_name).map do |object|
       col_vals = columns.map{|c| object.send(c)}
+      col_vals.map!{|c| c.is_a?(DateTime) ? c.strftime("%Y-%m-%d %H:%M:%S") : c}
       col_vals.map!{|c| c ? "'" + c.to_s + "'" : 'NULL'}
-      '(' + col_vals.join(', ') + ')'
+      '(' + col_vals.join(', ') + ')'       
     end
     ret + values.join(', ')
   end

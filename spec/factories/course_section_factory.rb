@@ -21,7 +21,7 @@ end
 
 Factory.define :term do |f|
   f.title "Term Title"
-  f.starts_at Time.now
-  f.ends_at Time.now + 6.months
+  f.starts_at DateTime.now
+  f.ends_at DateTime.now + 6.months
   f.sequence(:sourced_id) { |n| "#{n}_sourcedId"}
 end

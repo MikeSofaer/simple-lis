@@ -5,14 +5,14 @@ class Term < LISModel
   element :starts_at
   element :ends_at
 
-  @@containter = "Terms"
+  containter = "Terms"
   
   def to_xml
     "<term>
     <sourced_id>#{sourced_id}</sourced_id>
     <title>#{title}</title>
-    <starts_at>#{starts_at}</starts_at>
-    <ends_at>#{ends_at}</ends_at>
+    <starts_at>#{starts_at.strftime("%Y-%m-%d %H:%M:%S")}</starts_at>
+    <ends_at>#{ends_at.strftime("%Y-%m-%d %H:%M:%S")}</ends_at>
     </term>"
   end
 end
