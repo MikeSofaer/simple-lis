@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe MembershipsController do
   before(:each) do
     @section1 = Factory(:course_section)
-    @section2 = Factory(:course_section, :course_offering => CourseOffering.find_by_sourced_id(@section1.course_offering_sourced_id))
+    @section2 = Factory(:course_section, :course_offering => CourseOffering.datamapper_class.all(:sourced_id => @section1.course_offering_sourced_id))
     @person1 = Factory(:person)
     @person2 = Factory(:person)
     @m1 = Factory(:membership, :target => @section1, :person => @person1)
