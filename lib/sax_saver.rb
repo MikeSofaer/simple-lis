@@ -29,7 +29,9 @@ module SAXMachine
         else
           @setter = "#{@as}="
         end
+        
         @required = options[:required]
+        @db_type = options[:db_type] || String
       end
     end
   end
@@ -37,28 +39,50 @@ end
 
 module SAXSaver
   class MissingElementError < Exception; end
+  
   def self.included(base)
     base.extend SaverMethods
   end
+  
   module SaverMethods
     def columns
       @sax_config.instance_variable_get('@top_level_elements').map{|e| e.instance_variable_get('@as')}
     end
+    
+    def columns_with_types
+      @sax_config.instance_variable_get('@top_level_elements').each{|e| yield e.instance_variable_get('@as'), e.instance_variable_get('@db_type')}
+    end
+    
     def model
       @sax_config.instance_variable_get('@collection_elements')[0].instance_variable_get('@class')
     end
+    
     def table_name
       @sax_config.instance_variable_get('@collection_elements')[0].instance_variable_get('@as')
     end
+    
     def connection
       ActiveRecord::Base.connection
     end
+    
     def parse(xml)
       ret = super(xml)
       ret.validate
-    return ret
+      return ret
+    end
+    
+    def datamapper_class
+      klass = self.dup
+      klass.send(:include, DataMapper::Resource)
+      klass.storage_names[:default] = container.constantize.table_name
+      klass.property(:id, DataMapper::Types::Serial)
+      klass.property(:created_at, DateTime, :nullable => false)
+      klass.property(:updated_at, DateTime, :nullable => false)
+      columns_with_types { |n, t| klass.property(n, t) }
+      klass
+    end
   end
-  end
+  
   def sql
     columns = self.class.model.columns
     ret = "INSERT INTO #{self.class.table_name} (#{columns.join(', ')}) values "
@@ -69,18 +93,18 @@ module SAXSaver
     end
     ret + values.join(', ')
   end
+  
   def save!
-    p self
-    p self.class
-    p self.class.container
     return save_with(self.class.container.constantize) if self.class.container
     self.class.connection.execute sql
   end
+  
   def save_with(container_class)
     c = container_class.new
     c.collection = [self]
     c.save!
   end
+  
   def validate
     self.class.instance_variable_get('@sax_config').instance_variable_get('@top_level_elements').select{|e| e.required}.each do |element|
       unless send(element.instance_variable_get('@as'))
@@ -89,13 +113,16 @@ module SAXSaver
     end
     send(self.class.table_name).each{|o| o.validate} if self.class.table_name
   end
+  
   def table_name
     self.class.table_name
   end
-    def collection
-      send(table_name)
-    end
-    def collection=(values)
-      send(table_name + '=', values)
-    end
+  
+  def collection
+    send(table_name)
+  end
+  
+  def collection=(values)
+    send(table_name + '=', values)
+  end
 end

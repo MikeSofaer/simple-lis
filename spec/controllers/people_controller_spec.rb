@@ -2,22 +2,25 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe PeopleController do
   describe "get requests" do
     before(:each) do
-      p = Factory.build(:person, :sourced_id => "bobjones1")
-      pe = People.new
-      pe.people = [p]
-      pe.save!
+      Factory(:person, :sourced_id => "bobjones1")
     end
+    
+    it "should have built the person" do
+      Person.datamapper_class.all.size.should == 1
+    end
+    
     it "should return a list of people on index" do
       get :index
       doc = Hpricot(response.body)
-      user = Person.from_xml(doc.people.person)
+      user = Person.parse(doc.to_s)
       user.class.should == Person
       response.status.should == "200 OK"
     end
+    
     it "should return a person on show" do
       get :show, :sourced_id => "bobjones1"
       doc = Hpricot(response.body)
-      user = Person.from_xml(doc.person)
+      user = Person.parse(doc.to_s)
       user.class.should == Person
       response.status.should == "200 OK"
     end
@@ -57,7 +60,7 @@ describe PeopleController do
       
       request.env['RAW_POST_DATA'] = @xml.to_s
       go = lambda{put :update}
-      go.should change(Person, :count).by(1)
+      go.should change(Person.datamapper_class.all, :size).by(1)
       response.status.should == "200 OK"
     end
 
@@ -91,7 +94,7 @@ describe PeopleController do
   </contact_info>
 </person></people>"
       go = lambda{put :update}
-      go.should change(Person, :count).by(2)
+      go.should change(Person.datamapper_class.all, :size).by(2)
       response.status.should == "200 OK"
     end
 
@@ -116,7 +119,7 @@ describe PeopleController do
 
     it "should succeed with a good sourced_id" do
       go = lambda{delete :delete, :sourced_id => "bobjones1"}
-      go.should change(Person, :count).by(-1)
+      go.should change(Person.datamapper_class.all, :size).by(-1)
       response.status.should == "204 No Content"
     end
 

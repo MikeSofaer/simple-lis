@@ -15,15 +15,15 @@ class LisController < ActionController::Base
     end
 
     if active_filters.size == 1
-      objects = model.send("find_all_by_" +active_filters[0].to_s, params[active_filters[0]])
+      objects = model.datamapper_class.send("find_all_by_" +active_filters[0].to_s, params[active_filters[0]])
     else
-      objects = model.all
+      objects = model.datamapper_class.all
     end
     render :xml => "<#{resource.pluralize}>\n#{objects.map{|object| "  #{object.to_xml}\n"}}\n</#{resource.pluralize}>"
   end
   
   def show
-    object = model.find_by_sourced_id(params[:sourced_id])
+    object = model.datamapper_class.find_by_sourced_id(params[:sourced_id])
     if object.blank?
       render :xml => "No #{resource} with sourced_id #{params[:sourced_id]}", :status => :not_found
       return
@@ -53,7 +53,7 @@ class LisController < ActionController::Base
   end
   
   def delete
-    object = model.find_by_sourced_id(params[:sourced_id])
+    object = model.datamapper_class.find_by_sourced_id(params[:sourced_id])
     if object.blank?
       render :xml => "No #{resource} with sourced_id #{params[:sourced_id]}", :status => :not_found and return
     end

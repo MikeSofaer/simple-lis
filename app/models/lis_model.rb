@@ -1,10 +1,11 @@
 class LISModel
   include SAXMachine
   include SAXSaver
-  
+
   def self.container
     name.pluralize
   end
+  
   def optional_xml(field)
     value = self.send(field)
     return unless value
