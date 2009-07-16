@@ -74,7 +74,9 @@ Rails::Initializer.run do |config|
   # Activate observers that should always be running
   # Please note that observers generated using script/generate observer need to have an _observer suffix
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
-require 'nokogiri_prettifier'
-require 'hpricot_prettifier'
-require 'sax_saver'
+  require 'nokogiri_prettifier'
+  require 'hpricot_prettifier'
+  require 'sax_saver'
+  
+  ALLOWED_PARENTS = %w(course_sections course_templates groups memberships people terms meetings course_offerings)
 end

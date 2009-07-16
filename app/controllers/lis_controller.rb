@@ -4,17 +4,13 @@ class LisController < ActionController::Base
   #  ssl_required :index, :show, :update, :delete  #Comment out to pass specs, uncomment for security in production
   
   def index
-    active_filters = filterable_on.select{|filter| params[filter]}
-    if active_filters.size > 1
-      render :xml => "Cannot have more than one filter", :status => :unprocessable_entity
-      return
-    end
-
-    if active_filters.size == 1
-      objects = model.datamapper_class.all(active_filters[0].to_s.to_sym => params[active_filters[0]])
+    # puts "parent = #{params[:parent]}, parent_sourced_id = #{params[:parent_sourced_id]}"
+    if ALLOWED_PARENTS.include?(params[:parent]) && params[:parent] && params[:parent_sourced_id]
+      objects = model.datamapper_class.all("#{params[:parent].singularize}_sourced_id".to_sym => params[:parent_sourced_id])
     else
       objects = model.datamapper_class.all
     end
+    
     render :xml => "<#{resource.pluralize}>\n#{objects.map{|object| "  #{object.to_xml}\n"}}\n</#{resource.pluralize}>"
   end
   
@@ -48,7 +44,7 @@ class LisController < ActionController::Base
      end
   end
   
-  def delete
+  def destroy
     object = model.datamapper_class.first(:sourced_id => params[:sourced_id])
     if object.blank?
       render :xml => "No #{resource} with sourced_id #{params[:sourced_id]}", :status => :not_found and return
@@ -58,5 +54,13 @@ class LisController < ActionController::Base
   rescue @@mysql_error => e
     render :xml => e.message, :status => :unprocessable_entity and return
   rescue Exception => e
+  end
+  
+  def model
+    params[:resource].classify.constantize
+  end
+  
+  def resource
+    params[:resource].singularize
   end
 end
