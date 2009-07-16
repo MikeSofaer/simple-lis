@@ -28,10 +28,10 @@ class LisController < ActionController::Base
   
   def update
     begin
-      people = People.parse(request.body)
-      people.save!
+      objects = model.container.constantize.parse(request.body)
+      objects.save!
       
-      render :xml => people.people.map(&:sourced_id).inject('') { |res, sid| res << %Q{<url>#{url_for(:action => 'show', :sourced_id => sid)}</url>} }
+      render :xml => objects.collection.map(&:sourced_id).inject('') { |res, sid| res << %Q{<url>#{url_for(:action => 'show', :sourced_id => sid)}</url>} }
     rescue SAXSaver::MissingElementError => e
       render :xml => e.message, :status => :unprocessable_entity and return
     rescue NoMethodError => e
@@ -44,7 +44,7 @@ class LisController < ActionController::Base
       render :xml => "There is something terribly wrong with your request.", :status => :unprocessable_entity and return
     rescue Mysql::Error
       render :xml => "Database rejected your request, please make sure all foreign keys are valid", :status => :unprocessable_entity and return
-    end
+     end
   end
   
   def delete
@@ -62,8 +62,10 @@ class LisController < ActionController::Base
     render :xml => e.message, :status => :unprocessable_entity and return
   rescue Exception => e
     puts "not a MysqlError, instead it was a #{e.class.name}"
-    y e
     puts MysqlError.ancestors
+    puts "****"
+    puts Mysql::Error.ancestors
+    puts "****"
     puts e.class.ancestors
     render :xml => e.message, :status => :unprocessable_entity and return
   end
