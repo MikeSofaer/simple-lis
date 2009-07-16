@@ -102,7 +102,7 @@ END:VCALENDAR
       before(:each) do
         Factory(:person, :sourced_id => "bobjones1")
       end
-    
+      
       it "should have built the person" do
         Person.datamapper_class.first(:sourced_id => "bobjones1").should_not be_nil
       end
@@ -138,6 +138,9 @@ END:VCALENDAR
 </person></people>")
       end
 
+      it "should fail if the xml is invalid" do
+        lambda {request.env['RAW_POST_DATA'] = "<people><person><sourced_id>test</soknf></person></people>"}.should raise_error
+      end
       it "should fail a put with an empty person" do
         request.env['RAW_POST_DATA'] = "<person></person>"
         put :update, :resource => 'people'
@@ -163,7 +166,7 @@ END:VCALENDAR
 
       it "should succeed at a put with an OK person" do
         request.env['RAW_POST_DATA'] = @xml.to_s
-        put :update, :resource => 'people'
+        lambda{ put :update, :resource => 'people' }.should change(Person.datamapper_class, :count).by(1)
         response.status.should == "200 OK"
       end
     end

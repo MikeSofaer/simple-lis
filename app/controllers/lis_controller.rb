@@ -25,7 +25,12 @@ class LisController < ActionController::Base
   
   def update
     begin
-      objects = model.container.constantize.parse(request.body)
+      body_xml = request.body.read
+      puts body_xml
+      puts Nokogiri(body_xml).at('person')
+      objects = model.container.constantize.parse(body_xml)
+      puts objects
+      puts objects.collection.size
       objects.save!
       
       render :xml => objects.collection.map(&:sourced_id).inject('') { |res, sid| res << %Q{<url>#{url_for(:action => 'show', :sourced_id => sid)}</url>} }
@@ -39,9 +44,9 @@ class LisController < ActionController::Base
       render :xml => "Looks like your ical object is bad at the following line:\n#{e}.", :status => :unprocessable_entity and return
     rescue TypeError
       render :xml => "There is something terribly wrong with your request.", :status => :unprocessable_entity and return
-    rescue Mysql::Error
+    rescue @@mysql_error
       render :xml => "Database rejected your request, please make sure all foreign keys are valid", :status => :unprocessable_entity and return
-     end
+    end
   end
   
   def destroy
