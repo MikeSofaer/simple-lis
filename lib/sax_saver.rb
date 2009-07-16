@@ -1,9 +1,11 @@
 require 'sax-machine'
 require "sax-machine/sax_element_config"
+
 module SAXMachine
   class SAXConfig
     class ElementConfig
       attr_reader :required
+      
       def initialize(name, options)
         @name = name.to_s
 
@@ -107,12 +109,11 @@ module SAXSaver
   end
   
   def validate
-    self.class.instance_variable_get('@sax_config').instance_variable_get('@top_level_elements').select{|e| e.required}.each do |element|
-      unless send(element.instance_variable_get('@as'))
-        raise MissingElementError.new("Missing the required attribute " + element.name)
-      end
+    self.class.instance_variable_get('@sax_config').instance_variable_get('@top_level_elements').select{ |e| e.required }.each do |element|
+      raise MissingElementError.new("Missing the required attribute " + element.name) unless send(element.instance_variable_get('@as'))
     end
-    send(self.class.table_name).each{|o| o.validate} if self.class.table_name
+    
+    send(self.class.table_name).each{ |o| o.validate } if self.class.table_name
   end
   
   def table_name

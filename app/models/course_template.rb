@@ -1,9 +1,9 @@
 class CourseTemplate < LISModel
+  element :sourced_id, :required => true
+  element :title, :required => true
+  element :code, :required => true
+  element :description
 
- element :sourced_id, :required => true
- element :title, :required => true
- element :code, :required => true
- element :description
   def to_xml
     "<course_template>
     <sourced_id>#{sourced_id}</sourced_id>
