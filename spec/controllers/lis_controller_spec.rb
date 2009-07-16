@@ -227,7 +227,7 @@ END:VCALENDAR
     end
 
     describe "replication" do
-          before(:each) do
+      before(:each) do
         @xml = Hpricot("<people><person>
   <sourced_id>bjones8</sourced_id>
   <names>
