@@ -76,5 +76,5 @@ Rails::Initializer.run do |config|
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
 require 'nokogiri_prettifier'
 require 'hpricot_prettifier'
-require 'sax_saver'  
+require 'sax_saver'
 end

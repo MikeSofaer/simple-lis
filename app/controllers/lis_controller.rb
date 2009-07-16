@@ -1,4 +1,5 @@
 class LisController < ActionController::Base
+  ObjectSpace.each_object(Class){|k| @@mysql_error = k if k.name == 'MysqlError'}
   include SslRequirement
   #  ssl_required :index, :show, :update, :delete  #Comment out to pass specs, uncomment for security in production
   
@@ -54,19 +55,8 @@ class LisController < ActionController::Base
     end
     object.destroy
     render :xml => "", :status => :no_content
-  rescue MysqlError => e
-    puts "raised MysqlError #{e.message}"
-    render :xml => e.message, :status => :unprocessable_entity and return
-  rescue Mysql::Error => e
-    puts "raised Mysql::Error #{e.message}"
+  rescue @@mysql_error => e
     render :xml => e.message, :status => :unprocessable_entity and return
   rescue Exception => e
-    puts "not a MysqlError, instead it was a #{e.class.name}"
-    puts MysqlError.ancestors
-    puts "****"
-    puts Mysql::Error.ancestors
-    puts "****"
-    puts e.class.ancestors
-    render :xml => e.message, :status => :unprocessable_entity and return
   end
 end
