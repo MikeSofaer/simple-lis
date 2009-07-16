@@ -6,10 +6,10 @@ describe "Meeting" do
   end
   describe "generation from XML" do
     before(:each) do
-      @xml = Hpricot(@meeting.to_xml).meeting
+      @xml = Nokogiri(@meeting.to_xml)
     end
     it "should create a saveable Meeting from a valid XML" do
-      Meeting.from_xml(@xml).save!
+      Meeting.Parse(@xml.to_s).save!
     end
   end
 end

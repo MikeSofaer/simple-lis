@@ -1,15 +1,6 @@
 require 'vpim/vpim'
 require 'vpim/icalendar'
-module ActiveRecord
-  module Acts #:nodoc:
-    module Icalendar #:nodoc:
-      module ClassMethods
-        def acts_as_ical
-          include ActiveRecord::Acts::Icalendar::InstanceMethods
-        end
-      end
-
-      module InstanceMethods
+module ActsAsIcal
         def set_ical(ical)
           if ical.is_a? String
             ical = Vpim::Icalendar.decode(ical)[0]
@@ -27,14 +18,7 @@ module ActiveRecord
         end
         private
         def rrule_to_s
-
         end
-      end
-      def self.included(base)
-        base.extend(ClassMethods)
-      end
-    end
-  end
 end
 module Vpim
   class Icalendar

@@ -57,8 +57,13 @@ class LisController < ActionController::Base
   rescue MysqlError => e
     puts "raised MysqlError #{e.message}"
     render :xml => e.message, :status => :unprocessable_entity and return
+  rescue Mysql::Error => e
+    puts "raised Mysql::Error #{e.message}"
+    render :xml => e.message, :status => :unprocessable_entity and return
   rescue Exception => e
-    puts "not a MysqlError error, instead it was a #{e.class.name}"
+    puts "not a MysqlError, instead it was a #{e.class.name}"
+    y e
+    puts e.class.ancestors
     render :xml => e.message, :status => :unprocessable_entity and return
   end
 end
