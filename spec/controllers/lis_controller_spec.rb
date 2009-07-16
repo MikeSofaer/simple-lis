@@ -64,7 +64,7 @@ END:VEVENT
 END:VCALENDAR
 </i_calendar>
     </meeting></meetings>"
-        put :update, :resource => 'meetings', :sourced_id => 'sample2'
+        put :update, :resource => 'meetings'
         response.status.should == "200 OK"
       end
     end
@@ -140,14 +140,14 @@ END:VCALENDAR
 
       it "should fail a put with an empty person" do
         request.env['RAW_POST_DATA'] = "<person></person>"
-        put :update, :resource => 'people', :sourced_id => 'bjones8'
+        put :update, :resource => 'people'
         response.status.should == "422 Unprocessable Entity"
       end
 
       it "should fail a put with no sourced_id" do
         @xml.search('sourced_id').remove
         request.env['RAW_POST_DATA'] = @xml.to_s
-        put :update, :resource => 'people', :sourced_id => 'bjones8'
+        put :update, :resource => 'people'
         response.status.should == "422 Unprocessable Entity"
       end
 
@@ -157,13 +157,13 @@ END:VCALENDAR
         pe.save!
       
         request.env['RAW_POST_DATA'] = @xml.to_s
-        lambda{ put :update, :resource => 'people', :sourced_id => 'bjones8' }.should change(Person.datamapper_class, :count).by(1)
+        lambda{ put :update, :resource => 'people' }.should change(Person.datamapper_class, :count).by(1)
         response.status.should == "200 OK"
       end
 
       it "should succeed at a put with an OK person" do
         request.env['RAW_POST_DATA'] = @xml.to_s
-        put :update, :resource => 'people', :sourced_id => 'bjones8'
+        put :update, :resource => 'people'
         response.status.should == "200 OK"
       end
     end
@@ -190,7 +190,7 @@ END:VCALENDAR
     <email>bob4@your_school.edu</email>
   </contact_info>
 </person></people>"
-        go = lambda{put :update, :resource => 'people', :sourced_id => 'bjones8'}
+        go = lambda{put :update, :resource => 'people'}
         go.should change(Person.datamapper_class, :count).by(2)
         response.status.should == "200 OK"
       end
@@ -242,7 +242,7 @@ END:VCALENDAR
 
       it "should provide a URL to retrive the object" do
         request.env['RAW_POST_DATA'] = @xml.to_s
-        put :update, :resource => 'people', :sourced_id => 'bjones8'
+        put :update, :resource => 'people'
         response.body.should == "<url>http://test.host/people/bjones8</url>"
       end
 

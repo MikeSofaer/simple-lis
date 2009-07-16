@@ -11,7 +11,7 @@ describe LisController do
     end
     
     it "generates params for #update" do
-      params_from(:put, '/people/1').should == { :action => "update", :resource => "people", :controller => "lis", :sourced_id => "1" }
+      params_from(:put, '/people').should == { :action => "update", :resource => "people", :controller => "lis" }
     end
     
     it "generates params for #destroy" do
@@ -29,7 +29,7 @@ describe LisController do
     end
     
     it "generates params for #update" do
-      params_from(:put, '/terms/1/people/1').should == { :action => "update", :resource => "people", :controller => "lis", :sourced_id => "1", :parent => 'terms', :parent_sourced_id => '1' }
+      params_from(:put, '/terms/1/people').should == { :action => "update", :resource => "people", :controller => "lis", :parent => 'terms', :parent_sourced_id => '1' }
     end
     
     it "generates params for #destroy" do
