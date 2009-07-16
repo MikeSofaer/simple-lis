@@ -139,7 +139,10 @@ END:VCALENDAR
       end
 
       it "should fail if the xml is invalid" do
-        lambda {request.env['RAW_POST_DATA'] = "<people><person><sourced_id>test</soknf></person></people>"}.should raise_error
+        request.env['RAW_POST_DATA'] = "<people><person><sourced_id>test</soknf></person></people>"
+        put :update, :resource => 'people'
+        response.status.should == "422 Unprocessable Entity"
+        response.body.match(/We weren't able to parse any data from that./).should_not be_nil
       end
       it "should fail a put with an empty person" do
         request.env['RAW_POST_DATA'] = "<person></person>"

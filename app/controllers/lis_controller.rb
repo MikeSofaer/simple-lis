@@ -25,12 +25,10 @@ class LisController < ActionController::Base
   
   def update
     begin
-      body_xml = request.body.read
-      puts body_xml
-      puts Nokogiri(body_xml).at('person')
-      objects = model.container.constantize.parse(body_xml)
-      puts objects
-      puts objects.collection.size
+      objects = model.container.constantize.parse(request.body)
+      if objects.collection.size == 0
+        render :xml => "We weren't able to parse any data from that.  Are you sure the XMl is valid?", :status => :unprocessable_entity and return
+      end
       objects.save!
       
       render :xml => objects.collection.map(&:sourced_id).inject('') { |res, sid| res << %Q{<url>#{url_for(:action => 'show', :sourced_id => sid)}</url>} }
