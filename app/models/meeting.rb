@@ -1,18 +1,18 @@
 class Meeting < LISModel
-  include ActsAsIcal
-
   element :sourced_id, :required => true
   element :target_sourced_id, :required => true
   element :target_type, :required => true
-  element :i_calendae, :as => :ical, :required => true
-  
-  def ical=(value)
-    set_ical(value)
-  end
+  element :i_calendar, :as => :raw_icalendar, :required => true
 
   def target=(target)
     self.target_sourced_id = target.sourced_id
-    self.target_type = target.class.table_name
+    self.target_type = target.class.container.constantize.table_name
+  end
+  
+  def raw_icalendar=(ical)
+    ical = Vpim::Icalendar.decode(ical)[0] if ical.is_a? String
+    puts "in raw_icalendar setting raw_icalendar to #{ical.encode}"
+    @raw_icalendar = ical.encode
   end
 
   def to_xml
@@ -20,11 +20,11 @@ class Meeting < LISModel
     <sourced_id>#{sourced_id}</sourced_id>
     <target_sourced_id>#{target_sourced_id}</target_sourced_id>
     <target_type>#{target_type}</target_type>
-    <i_calendar>#{get_ical.to_s}</i_calendar>
+    <i_calendar>#{Vpim::Icalendar.decode(raw_icalendar)[0].to_s}</i_calendar>
     </meeting>"
   end
 end
 
 class Meetings < LISContainer
-  elements :meetings, :as => :meetings, :class => Meeting
+  elements :meeting, :as => :meetings, :class => Meeting
 end

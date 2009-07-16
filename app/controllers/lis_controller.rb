@@ -63,6 +63,7 @@ class LisController < ActionController::Base
   rescue Exception => e
     puts "not a MysqlError, instead it was a #{e.class.name}"
     y e
+    puts MysqlError.ancestors
     puts e.class.ancestors
     render :xml => e.message, :status => :unprocessable_entity and return
   end

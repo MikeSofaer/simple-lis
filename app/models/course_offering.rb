@@ -1,8 +1,4 @@
 class CourseOffering < LISModel
-=begin  belongs_to :term, :foreign_key => :term_sourced_id, :reference_column => 'sourced_id'
-  belongs_to :course_template, :foreign_key => :course_template_sourced_id, :reference_column => 'sourced_id'
-  belongs_to :group, :foreign_key => :group_sourced_id, :reference_column => 'sourced_id'
-=end
   element :sourced_id, :required => true
   element :term_sourced_id, :required => true
   element :course_template_sourced_id, :required => true

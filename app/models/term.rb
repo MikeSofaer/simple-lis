@@ -1,5 +1,4 @@
 class Term < LISModel
-
   element :sourced_id, :required => true
   element :title, :required => true
   element :starts_at, :db_type => DateTime

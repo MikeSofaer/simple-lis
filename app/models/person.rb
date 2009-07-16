@@ -1,5 +1,4 @@
 class Person < LISModel
-
   element :sourced_id, :required => true
   element :given, :as => :given_name, :required => true
   element :family, :as => :family_name, :required => true
