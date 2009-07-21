@@ -29,7 +29,8 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   #config.gem "pauldix-sax-machine", :lib => 'sax-machine', :source => 'http://gems.github.com'
   config.gem 'do_mysql'
-  config.gem "rails_datamapper"  
+  config.gem "rails_datamapper"
+  config.gem "MikeSofaer-saxual-replication"
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
   # :all can be used as a placeholder for all plugins not explicitly named
@@ -76,7 +77,7 @@ Rails::Initializer.run do |config|
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
   require 'nokogiri_prettifier'
   require 'hpricot_prettifier'
-  require '../saxual-replication/lib/saxual-replication'
+  require 'saxual-replication'
   
   ALLOWED_PARENTS = %w(course_sections course_templates groups memberships people terms meetings course_offerings)
 end
