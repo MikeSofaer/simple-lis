@@ -44,19 +44,19 @@ describe "Group" do
     end
     it "should fail without a title" do
       @xml.search('title').remove
-      lambda{Group.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{Group.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should fail without a category" do
       @xml.search('category').remove
-      lambda{Group.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{Group.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should fail without a sub-category" do
       @xml.search('sub_category').remove
-      lambda{Group.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{Group.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should not fail without a description" do
       @xml.search('description').remove
-      lambda{Group.parse(@xml.to_s).save!}.should_not raise_error(SAXSaver::MissingElementError)
+      lambda{Group.parse(@xml.to_s).save!}.should_not raise_error(SAXualReplication::MissingElementError)
     end
     it "should not generate a description tag if created with no description" do
       Hpricot(Group.parse(@xml.to_s).to_xml).search('description').blank?.should == false
@@ -65,7 +65,7 @@ describe "Group" do
     end
     it "should not fail without a parent" do
       @xml.search('parent_sourced_id').remove
-      lambda{Group.parse(@xml.to_s).save!}.should_not raise_error(SAXSaver::MissingElementError)
+      lambda{Group.parse(@xml.to_s).save!}.should_not raise_error(SAXualReplication::MissingElementError)
     end
     it "should not generate a parent tag if created with no parent" do
       Hpricot(Group.parse(@xml.to_s).to_xml).search('parent_sourced_id').blank?.should == false
@@ -74,7 +74,7 @@ describe "Group" do
     end
     it "should fail without a sourced_id" do
       @xml.search('sourced_id').remove
-      lambda{Group.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{Group.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
   end
 end

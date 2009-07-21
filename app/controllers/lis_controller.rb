@@ -25,14 +25,14 @@ class LisController < ActionController::Base
   
   def update
     begin
-      objects = model.container.constantize.parse(request.body)
-      if objects.collection.size == 0
+      objects = model.parse_multiple(request.body)
+      if objects.size == 0
         render :xml => "We weren't able to parse any data from that.  Are you sure the XMl is valid?", :status => :unprocessable_entity and return
       end
-      objects.save!
+      model.save objects
       
-      render :xml => objects.collection.map(&:sourced_id).inject('') { |res, sid| res << %Q{<url>#{url_for(:action => 'show', :sourced_id => sid)}</url>} }
-    rescue SAXSaver::MissingElementError => e
+      render :xml => objects.map(&:sourced_id).inject('') { |res, sid| res << %Q{<url>#{url_for(:action => 'show', :sourced_id => sid)}</url>} }
+    rescue SAXualReplication::MissingElementError => e
       render :xml => e.message, :status => :unprocessable_entity and return
     rescue NoMethodError => e
       render :xml => "Check your XML, it may be missing tags. \n#{e.message}", :status => :unprocessable_entity and return

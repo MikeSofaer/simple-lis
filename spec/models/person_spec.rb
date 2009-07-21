@@ -32,7 +32,7 @@ describe "Person" do
       @xml = '<people>' + @person.to_xml + '</people>'
     end
     it "should create a saveable Person from a valid XML" do
-      People.parse(@xml).save!
+      Person.save Person.parse_multiple(@xml)
     end
     describe 'failure states' do
       before(:each) do
@@ -40,19 +40,19 @@ describe "Person" do
       end
       it "should fail without a given name" do
         @xml.at('given').remove
-        lambda{People.parse(@xml.to_s)}.should raise_error(SAXSaver::MissingElementError)
+        lambda{Person.parse_multiple(@xml.to_s)}.should raise_error(SAXualReplication::MissingElementError)
       end
       it "should fail without a family name" do
         @xml.at('family').remove
-        lambda{People.parse(@xml.to_s)}.should raise_error(SAXSaver::MissingElementError)
+        lambda{Person.parse_multiple(@xml.to_s)}.should raise_error(SAXualReplication::MissingElementError)
       end
       it "should fail without an email" do
         @xml.at('email').remove
-        lambda{People.parse(@xml.to_s)}.should raise_error(SAXSaver::MissingElementError)
+        lambda{Person.parse_multiple(@xml.to_s)}.should raise_error(SAXualReplication::MissingElementError)
       end
       it "should fail without a sourced_id" do
         @xml.at('sourced_id').remove
-        lambda{People.parse(@xml.to_s)}.should raise_error(SAXSaver::MissingElementError)
+        lambda{Person.parse_multiple(@xml.to_s)}.should raise_error(SAXualReplication::MissingElementError)
       end
     end
   end

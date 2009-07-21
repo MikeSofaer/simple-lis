@@ -4,6 +4,9 @@ class Person < LISModel
   element :family, :as => :family_name, :required => true
   element :email, :required => true
 
+  table "people"
+  tag :person
+
   def to_xml
 "<person>
   <sourced_id>#{sourced_id}</sourced_id>
@@ -16,17 +19,4 @@ class Person < LISModel
   </contact_info>
 </person>"
   end
-  
-  # class AR < ActiveRecord::Base
-  #   self.table_name = self.parent_name.tableize
-  #   
-  #   def to_xml_with_ar
-  #     to_xml_without_ar(:root => self.class.parent_name)
-  #   end
-  #   alias_method_chain :to_xml, :ar
-  # end
-end
-
-class People < LISContainer
-  elements :person, :as => :people, :class => Person
 end

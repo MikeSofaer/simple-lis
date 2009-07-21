@@ -7,6 +7,9 @@ class Group < LISModel
   element :description
   element :parent_sourced_id
 
+  table "groups"
+  tag :group
+
   def to_xml
     "<group>
     <sourced_id>#{sourced_id}</sourced_id>
@@ -21,8 +24,4 @@ class Group < LISModel
   def parent=(parent)
     self.parent_sourced_id = parent.sourced_id
   end
-end
-
-class Groups < LISContainer
-  elements :group, :as => :groups, :class => Group
 end

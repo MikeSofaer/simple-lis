@@ -4,6 +4,9 @@ class CourseOffering < LISModel
   element :course_template_sourced_id, :required => true
   element :group_sourced_id
 
+  table "course_offerings"
+  tag :course_offering
+
   def course_template=(template)
     self.course_template_sourced_id = template.sourced_id
   end
@@ -24,9 +27,5 @@ class CourseOffering < LISModel
     #{optional_xml(:group_sourced_id)}
     </course_offering>"
   end
-end
-
-class CourseOfferings < LISContainer
-  elements :course_offerings, :as => :course_offerings, :class => CourseOffering
 end
 

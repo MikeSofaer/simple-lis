@@ -3,6 +3,9 @@ class CourseSection < LISModel
   element :course_offering_sourced_id, :required => true
   element :label, :required => true
   element :description
+
+  table "course_sections"
+  tag :course_section
   
   def course_offering=(offering)
     self.course_offering_sourced_id = offering.sourced_id
@@ -16,8 +19,4 @@ class CourseSection < LISModel
     #{optional_xml(:description)}
     </course_section>"
   end
-end
-
-class CourseSections < LISContainer
-  elements :course_sections, :as => :course_sections, :class => CourseSection
 end

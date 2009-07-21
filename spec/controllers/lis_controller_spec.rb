@@ -158,10 +158,9 @@ END:VCALENDAR
       end
 
       it "should succeed on a put with a duplicate email" do  #I'd change this, but it's not easy to do, due to ON DUPLICATE KEY UPDATE
-        pe = People.new
-        pe.people = [Factory.build(:person, :email => "bob@your_school.edu")]
-        pe.save!
-      
+
+        Factory(:person, :email => "bob@your_school.edu")
+
         request.env['RAW_POST_DATA'] = @xml.to_s
         lambda{ put :update, :resource => 'people' }.should change(Person.datamapper_class, :count).by(1)
         response.status.should == "200 OK"
@@ -210,7 +209,7 @@ END:VCALENDAR
 
       it "should fail with no sourced_id" do
         go = lambda{delete :destroy}
-        go.should raise_error ActionController::RoutingError
+        go.should raise_error(ActionController::RoutingError)
       end
 
       it "should fail with a bad sourced_id" do

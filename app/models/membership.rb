@@ -6,6 +6,9 @@ class Membership < LISModel
   element :role_name, :required => true, :as => :role
   element :starts_at, :db_type => DateTime
   element :ends_at, :db_type => DateTime
+
+  table "memberships"
+  tag :membership
   
   def starts_at=(value)
     @starts_at = value.is_a?(DateTime) ? value : DateTime.parse(value)
@@ -25,7 +28,7 @@ class Membership < LISModel
   
   def target=(target)
     self.target_sourced_id = target.sourced_id
-    self.target_type = target.class.container.constantize.table_name
+    self.target_type = target.class.instance_variable_get('@table_name')
   end
   
   def to_xml
@@ -41,8 +44,4 @@ class Membership < LISModel
     </role>
     </membership>"
   end
-end
-
-class Memberships < LISContainer
-  elements :memberships, :as => :memberships, :class => Membership
 end

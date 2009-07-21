@@ -4,6 +4,9 @@ class CourseTemplate < LISModel
   element :code, :required => true
   element :description
 
+  table "course_templates"
+  tag :course_template
+
   def to_xml
     "<course_template>
     <sourced_id>#{sourced_id}</sourced_id>
@@ -12,8 +15,4 @@ class CourseTemplate < LISModel
     <code>#{code}</code>
     </course_template>"
   end
-end
-
-class CourseTemplates < LISContainer
-  elements :course_template, :as => :course_templates, :class => CourseTemplate
 end

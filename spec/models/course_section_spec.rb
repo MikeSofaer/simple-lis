@@ -36,15 +36,15 @@ describe "CourseSection" do
     end
     it "should fail without an offering" do
       @xml.at('course_offering_sourced_id').remove
-      lambda{CourseSection.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseSection.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should fail without a label" do
       @xml.at('label').remove
-      lambda{CourseSection.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseSection.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should not fail without a description" do
       @xml.at('description').remove
-      lambda{CourseSection.parse(@xml.to_s).save!}.should_not raise_error(SAXSaver::MissingElementError)
+      lambda{CourseSection.parse(@xml.to_s).save!}.should_not raise_error(SAXualReplication::MissingElementError)
     end
     it "should not generate a description tag if created with no description" do
       Hpricot(CourseSection.parse(@xml.to_s).to_xml).search('description').blank?.should == false
@@ -53,7 +53,7 @@ describe "CourseSection" do
     end
     it "should fail without a sourced_id" do
       @xml.at('sourced_id').remove
-      lambda{CourseSection.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseSection.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
   end
 end

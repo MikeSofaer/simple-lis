@@ -36,19 +36,19 @@ describe "CourseOffering" do
     end
     it "should fail without a template" do
       @xml.search('course_template_sourced_id').remove
-      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should fail without a term" do
       @xml.search('term_sourced_id').remove
-      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should not fail without a group" do
       @xml.search('group_sourced_id').remove
-      lambda{CourseOffering.parse(@xml.to_s).save!}.should_not raise_error(SAXSaver::MissingElementError)
+      lambda{CourseOffering.parse(@xml.to_s).save!}.should_not raise_error(SAXualReplication::MissingElementError)
     end
     it "should fail without a sourced_id" do
       @xml.search('sourced_id').remove
-      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseOffering.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
   end
 end

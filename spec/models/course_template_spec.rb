@@ -32,27 +32,27 @@ describe "CourseTemplate" do
       @xml = Hpricot(@template.to_xml).course_template
     end
     it "should create a saveable Template from a valid XML" do
-      CourseTemplates.parse(@xml.to_s).save!
+      CourseTemplate.parse(@xml.to_s).save!
     end
     it "should fail without a code" do
       @xml.search('code').remove
-      lambda{CourseTemplates.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseTemplate.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should fail without a title" do
       @xml.search('title').remove
-      lambda{CourseTemplates.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseTemplate.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
     it "should not fail without a description" do
       @xml.search('description').remove
-      CourseTemplates.parse(@xml.to_s).save!
+      CourseTemplate.parse(@xml.to_s).save!
     end
     it "should not generate a description tag if created with no description" do
       @xml.search('description').remove
-      Hpricot(CourseTemplates.parse(@xml.to_s).to_xml).search('description').blank?.should == true
+      Hpricot(CourseTemplate.parse(@xml.to_s).to_xml).search('description').blank?.should == true
     end
     it "should fail without a sourced_id" do
       @xml.search('sourced_id').remove
-      lambda{CourseTemplates.parse(@xml.to_s).save!}.should raise_error(SAXSaver::MissingElementError)
+      lambda{CourseTemplate.parse(@xml.to_s).save!}.should raise_error(SAXualReplication::MissingElementError)
     end
   end
 end

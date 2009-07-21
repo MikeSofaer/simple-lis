@@ -4,9 +4,12 @@ class Meeting < LISModel
   element :target_type, :required => true
   element :i_calendar, :as => :raw_icalendar, :required => true
 
+  table "meetings"
+  tag :meeting
+
   def target=(target)
     self.target_sourced_id = target.sourced_id
-    self.target_type = target.class.container.constantize.table_name
+    self.target_type = target.class.instance_variable_get('@table_name')
   end
   
   def raw_icalendar=(ical)
@@ -22,8 +25,4 @@ class Meeting < LISModel
     <i_calendar>#{Vpim::Icalendar.decode(raw_icalendar)[0].to_s}</i_calendar>
     </meeting>"
   end
-end
-
-class Meetings < LISContainer
-  elements :meeting, :as => :meetings, :class => Meeting
 end

@@ -3,6 +3,9 @@ class Term < LISModel
   element :title, :required => true
   element :starts_at, :db_type => DateTime
   element :ends_at, :db_type => DateTime
+
+  table "terms"
+  tag :term
   
   def starts_at=(value)
     @starts_at = value.is_a?(DateTime) ? value : DateTime.parse(value)
@@ -21,8 +24,3 @@ class Term < LISModel
     </term>"
   end
 end
-
-class Terms < LISContainer
-  elements :term, :as => :terms, :class => Term
-end
-
