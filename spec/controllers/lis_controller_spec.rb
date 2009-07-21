@@ -91,7 +91,6 @@ END:VCALENDAR
     it "should give only a user's memberships" do
       get :index, :resource => 'memberships', :parent => 'people', :parent_sourced_id => @person1.sourced_id
       ids = Hpricot(response.body).search('sourced_id').map(&:inner_text)
-      puts "ids is #{ids.inspect}"
       ids.member?(@m1.sourced_id).should be_true
       ids.member?(@m2.sourced_id).should be_false
     end
@@ -244,15 +243,22 @@ END:VCALENDAR
   </contact_info>
 </person></people>")
       end
-
-      it "should provide a URL to retrive the object" do
-        request.env['RAW_POST_DATA'] = @xml.to_s
-        put :update, :resource => 'people'
-        response.body.should == "<url>http://test.host/people/bjones8</url>"
+      
+      context "on PUT to :update" do
+        before(:each) do
+          request.env['RAW_POST_DATA'] = @xml.to_s
+          put :update, :resource => 'people'
+        end
+        
+        it "should provide a URL to retrive the object" do
+          response.body.should == "<url>http://test.host/people/bjones8</url>"
+        end
+        
+        it "on GET to :show on the same sourced_id should return the correct XML" do
+          get :show, :sourced_id => 'bjones8', :resource => 'people'
+          response.body.should == @xml.at('person').to_s
+        end
       end
-
-      it "URL provided should return an object"
-      it "object returned should correctly reproduce XML"
     end
   end
 end
