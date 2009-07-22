@@ -2,11 +2,11 @@ development:
   adapter: mysql
   username: root
   host:  localhost
-  database: simple_lis
+  database: simple_lis_opensource_development
 
 test:
   adapter: mysql
   username: root
   host:  localhost
-  database: simple_lis_test
+  database: simple_lis_opensource_test
 
