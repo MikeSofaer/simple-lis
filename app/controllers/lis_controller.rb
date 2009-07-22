@@ -1,34 +1,30 @@
 class LisController < ActionController::Base
-  ObjectSpace.each_object(Class){|k| @@mysql_error = k if k.name == 'MysqlError'}
+  ObjectSpace.each_object(Class){ |k| @@mysql_error = k if k.name == 'MysqlError' }
   include SslRequirement
-  #  ssl_required :index, :show, :update, :delete  #Comment out to pass specs, uncomment for security in production
+  # ssl_required :index, :show, :update, :delete
   
   def index
-    # puts "parent = #{params[:parent]}, parent_sourced_id = #{params[:parent_sourced_id]}"
     if ALLOWED_PARENTS.include?(params[:parent]) && params[:parent] && params[:parent_sourced_id]
       objects = model.datamapper_class.all("#{params[:parent].singularize}_sourced_id".to_sym => params[:parent_sourced_id])
     else
       objects = model.datamapper_class.all
     end
     
-    render :xml => "<#{resource.pluralize}>\n#{objects.map{|object| "  #{object.to_xml}\n"}}\n</#{resource.pluralize}>"
+    render :xml => "<#{resource.pluralize}>\n#{objects.map{ |object| "  #{object.to_xml}\n" }}\n</#{resource.pluralize}>"
   end
   
   def show
     object = model.datamapper_class.first(:sourced_id => params[:sourced_id])
-    if object.blank?
-      render :xml => "No #{resource} with sourced_id #{params[:sourced_id]}", :status => :not_found
-      return
-    end
+    render :xml => "No #{resource} with sourced_id #{params[:sourced_id]}", :status => :not_found and return  if object.blank?
+
     render :xml => object.to_xml
   end
   
   def update
     begin
-      objects = model.parse_multiple(request.body)
-      if objects.size == 0
-        render :xml => "We weren't able to parse any data from that.  Are you sure the XMl is valid?", :status => :unprocessable_entity and return
-      end
+      objects = model.parse_multiple(request.body)      
+      render :xml => "We weren't able to parse any data from that.  Are you sure the XMl is valid?", :status => :unprocessable_entity and return  if objects.size == 0
+      
       model.save objects
       
       render :xml => objects.map(&:sourced_id).inject('') { |res, sid| res << %Q{<url>#{url_for(:action => 'show', :sourced_id => sid)}</url>} }
