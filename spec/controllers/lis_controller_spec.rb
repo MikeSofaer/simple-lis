@@ -31,6 +31,46 @@ describe LisController do
       response.body.match(/foreign key constraint fails/).should_not be_nil
       response.status.should == "422 Unprocessable Entity"
     end
+    it "should allow you to create an offering with a template and term that both exist" do
+      term = Factory(:term)
+      xml = Hpricot(@offering.to_xml)
+      xml.at('term_sourced_id').swap "<term_sourced_id>#{term.sourced_id}</term_sourced_id>"
+      xml.at('sourced_id').swap "<sourced_id>New sourced_id</sourced_id>"
+      request.env['RAW_POST_DATA'] = xml.to_s
+      go = lambda {put :update, :resource => 'course_offerings'}
+      go.should change(CourseOffering.datamapper_class, :count).by(1)
+      response.status.should == "200 OK"
+    end
+    it "should not allow you to create an offering if an offering with that term and template already exists" do
+      xml = Hpricot(@offering.to_xml)
+      xml.at('sourced_id').swap "<sourced_id>New sourced_id</sourced_id>"
+      request.env['RAW_POST_DATA'] = xml.to_s
+      go = lambda {put :update, :resource => 'course_offerings'}
+      go.should_not change(CourseOffering.datamapper_class, :count)
+      #This is a little sketchy, it would be nice to warn that the object was not created
+    end
+    it "should not allow you to create an offering if there is no relevant course template" do
+      Factory(:course_template)
+      xml1 = Hpricot(@offering.to_xml)
+      xml2 = Hpricot(@offering.to_xml)
+      xml1.at('course_template_sourced_id').swap "<course_template_sourced_id>Fake ID</course_template_sourced_id>"
+      xml1.at('sourced_id').swap "<sourced_id>New sourced_id</sourced_id>"
+      request.env['RAW_POST_DATA'] = '<xml>' + xml1.to_s + xml2.to_s + '</xml>'
+      go = lambda {put :update, :resource => 'course_offerings'}
+      go.should_not change(CourseOffering.datamapper_class, :count)
+      response.status.should == "422 Unprocessable Entity"
+      response.body.should match(/Fake ID/)
+      response.body.should_not match(/#{CourseTemplate.datamapper_class.first.sourced_id}/)
+    end
+    it "should not allow you to create an offering if there is no relevant term" do
+      xml = Hpricot(@offering.to_xml)
+      xml.at('term_sourced_id').swap "<term_sourced_id>Fake ID</term_sourced_id>"
+      request.env['RAW_POST_DATA'] = xml.to_s
+      go = lambda {put :update, :resource => 'course_offerings'}
+      go.should_not change(CourseOffering.datamapper_class, :count)
+      response.status.should == "422 Unprocessable Entity"
+      response.body.should match(/Fake ID/)
+    end
   end
 
   context "Meetings" do

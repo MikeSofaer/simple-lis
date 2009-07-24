@@ -57,6 +57,7 @@ class CreateDatabase < ActiveRecord::Migration
       t.foreign_key :group_sourced_id, :groups, :sourced_id, :on_delete => :set_null
     end
     add_index "course_offerings", ["sourced_id"], :name => "index_offerings_on_sourced_id", :unique => true
+    add_index "course_offerings", ["course_template_sourced_id", "term_sourced_id"], :name => "one_offering_per_pair", :unique => true
 
     create_table "course_sections", :force => true do |t|
       t.string   "sourced_id",                      :null => false

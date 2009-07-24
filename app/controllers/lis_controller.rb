@@ -74,7 +74,12 @@ class LisController < ActionController::Base
     render :xml => "There is something terribly wrong with your request.", :status => :unprocessable_entity and return
   rescue @@mysql_error => e
     logger.info { "MYSQL ERROR! error is #{e.message}" }
-    render :xml => "Database rejected your request, please make sure all foreign keys are valid", :status => :unprocessable_entity and return
+    if e.message.match(/FOREIGN KEY \("(.*)"\) REFERENCES "(.*)" \("(.*)"\)\)/)
+      possibles = model.parse_multiple(request.body).map{|o| o.send($1)}  #Yeah, we parse it a again.  Got a problem with that?
+      nots = model.connection.query "select #{$3} from #{$2} where #{$3} in (#{possibles.map{|a| "'" + a + "'"}.join(',')})"
+      render :xml => "The #{$3} table does not have rows with #{$2} with these values: #{(possibles - nots).inspect}", :status => :unprocessable_entity and return
+    end
+    render :xml => "Database rejected your request, here is the error message: #{e.message}", :status => :unprocessable_entity and return
   end
   
   def destroy
