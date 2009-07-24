@@ -6,6 +6,7 @@ class CourseOffering < LISModel
 
   table "course_offerings"
   tag :course_offering
+  key_column :sourced_id
 
   def course_template=(template)
     self.course_template_sourced_id = template.sourced_id

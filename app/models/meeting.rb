@@ -6,6 +6,7 @@ class Meeting < LISModel
 
   table "meetings"
   tag :meeting
+  key_column :sourced_id
 
   def target=(target)
     self.target_sourced_id = target.sourced_id

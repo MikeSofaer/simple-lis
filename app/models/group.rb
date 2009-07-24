@@ -9,6 +9,7 @@ class Group < LISModel
 
   table "groups"
   tag :group
+  key_column :sourced_id
 
   def to_xml
     "<group>

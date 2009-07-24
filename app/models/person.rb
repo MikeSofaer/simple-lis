@@ -6,6 +6,7 @@ class Person < LISModel
 
   table "people"
   tag :person
+  key_column :sourced_id
 
   def to_xml
 "<person>

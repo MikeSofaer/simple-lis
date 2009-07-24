@@ -6,6 +6,7 @@ class CourseTemplate < LISModel
 
   table "course_templates"
   tag :course_template
+  key_column :sourced_id
 
   def to_xml
     "<course_template>

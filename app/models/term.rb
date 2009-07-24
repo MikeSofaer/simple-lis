@@ -6,6 +6,7 @@ class Term < LISModel
 
   table "terms"
   tag :term
+  key_column :sourced_id
   
   def starts_at=(value)
     @starts_at = value.is_a?(DateTime) ? value : DateTime.parse(value)

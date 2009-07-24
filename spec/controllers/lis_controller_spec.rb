@@ -170,6 +170,16 @@ END:VCALENDAR
         lambda{ put :update, :resource => 'people' }.should change(Person.datamapper_class, :count).by(1)
         response.status.should == "200 OK"
       end
+      it "should change the information of a person already in the DB" do
+        person = Factory(:person)
+        Person.datamapper_class.first.email.should_not == "bob@your_school.edu"
+        @xml.at('sourced_id').swap "<sourced_id>#{person.sourced_id}</sourced_id>"
+        request.env['RAW_POST_DATA'] = @xml.to_s
+        lambda{ put :update, :resource => 'people' }.should_not change(Person.datamapper_class, :count)
+        response.status.should == "200 OK"
+        Person.datamapper_class.first.email.should == "bob@your_school.edu"
+
+      end
     end
 
     describe "multi-record import" do
