@@ -41,6 +41,7 @@ describe LisController do
       go.should change(CourseOffering.datamapper_class, :count).by(1)
       response.status.should == "200 OK"
     end
+    
     it "should not allow you to create an offering if an offering with that term and template already exists" do
       xml = Hpricot(@offering.to_xml)
       xml.at('sourced_id').swap "<sourced_id>New sourced_id</sourced_id>"
@@ -49,6 +50,7 @@ describe LisController do
       go.should_not change(CourseOffering.datamapper_class, :count)
       #This is a little sketchy, it would be nice to warn that the object was not created
     end
+    
     it "should not allow you to create an offering if there is no relevant course template" do
       Factory(:course_template)
       xml1 = Hpricot(@offering.to_xml)
@@ -62,6 +64,7 @@ describe LisController do
       response.body.should match(/Fake ID/)
       response.body.should_not match(/#{CourseTemplate.datamapper_class.first.sourced_id}/)
     end
+    
     it "should not allow you to create an offering if there is no relevant term" do
       xml = Hpricot(@offering.to_xml)
       xml.at('term_sourced_id').swap "<term_sourced_id>Fake ID</term_sourced_id>"

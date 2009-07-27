@@ -30,7 +30,7 @@ Rails::Initializer.run do |config|
   #config.gem "pauldix-sax-machine", :lib => 'sax-machine', :source => 'http://gems.github.com'
   config.gem 'do_mysql'
   config.gem "rails_datamapper"
-  config.gem "MikeSofaer-saxual-replication", :lib => 'saxual-replication', :source => 'http://gems.github.com'
+  config.gem "MikeSofaer-saxual-replication", :lib => 'saxual-replication', :source => 'http://gems.github.com', :version => '>=0.0.5'
   
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
