@@ -16,7 +16,7 @@ class CreateDatabase < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
       t.string "title",                      :null => false
-      t.string "description"
+      t.text "description"
       t.string "code",                      :null => false
     end
     add_index "course_templates", ["sourced_id"], :name => "index_course_templates_on_sourced_id", :unique => true
@@ -38,7 +38,7 @@ class CreateDatabase < ActiveRecord::Migration
       t.string "title",                      :null => false
       t.string "category",                      :null => false
       t.string "sub_category",                      :null => false
-      t.string "description"
+      t.text "description"
       t.string "parent_sourced_id"
       t.string "location"
     end
@@ -64,7 +64,7 @@ class CreateDatabase < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
       t.string "course_offering_sourced_id", :null => false
-      t.string "description"
+      t.text "description"
       t.string "label",                      :null => false
       t.foreign_key :course_offering_sourced_id, :course_offerings, :sourced_id
     end
