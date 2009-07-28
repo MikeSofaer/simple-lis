@@ -1,23 +1,37 @@
-class Membership < ActiveRecord::Base
+class Membership < LISModel
+  element :sourced_id, :required => true
+  element :target_sourced_id, :required => true
+  element :target_type, :required => true
+  element :person_sourced_id, :required => true
+  element :role_name, :required => true, :as => :role
+  element :starts_at, :db_type => DateTime
+  element :ends_at, :db_type => DateTime
+
+  table "memberships"
+  tag :membership
+  key_column :sourced_id
+  
+  def starts_at=(value)
+    @starts_at = value.is_a?(DateTime) ? value : DateTime.parse(value)
+  end
+  
+  def ends_at=(value)
+    @ends_at = value.is_a?(DateTime) ? value : DateTime.parse(value)
+  end
+  
   def term=(term)
     self.term_sourced_id = term.sourced_id
   end
+  
   def person=(person)
     self.person_sourced_id = person.sourced_id
   end
+  
   def target=(target)
     self.target_sourced_id = target.sourced_id
-    self.target_type = target.class.table_name
+    self.target_type = target.class.instance_variable_get('@table_name')
   end
-  def self.from_xml(doc)
-    new(:sourced_id => doc.sourced_id,
-      :target_sourced_id => doc.target_sourced_id,
-      :target_type => doc.target_type,
-      :person_sourced_id => doc.person_sourced_id,
-      :role => doc.role.name,
-      :starts_at => doc.role.optional(:starts_at),
-      :ends_at => doc.role.optional(:ends_at))
-  end
+  
   def to_xml
     "<membership>
     <sourced_id>#{sourced_id}</sourced_id>
@@ -25,7 +39,7 @@ class Membership < ActiveRecord::Base
     <target_sourced_id>#{target_sourced_id}</target_sourced_id>
     <target_type>#{target_type}</target_type>
     <role>
-      <name>#{role}</name>
+      <role_name>#{role}</role_name>
       #{optional_xml(:starts_at)}
       #{optional_xml(:ends_at)}
     </role>

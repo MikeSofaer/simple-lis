@@ -1,5 +1,5 @@
 require 'hpricot'
-
+require 'active_record'
 module Hpricot
   class MissingFieldError < Hpricot::Error #:nodoc:
   end
@@ -14,7 +14,7 @@ module Hpricot
       if list.blank?
          return nil
       end
-      return list      
+      return list
     end
     def method_missing(method, *args)
       list = send("children_of_type", method.to_s)

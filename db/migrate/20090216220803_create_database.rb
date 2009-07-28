@@ -8,9 +8,8 @@ class CreateDatabase < ActiveRecord::Migration
       t.datetime "created_at"
       t.datetime "updated_at"
     end
-
-    add_index "people", ["email"], :name => "index_people_on_email", :unique => true
-    add_index "people", ["sourced_id"], :name => "index_people_on_sourced_id"
+    add_index "people", ["email"], :name => "index_people_on_email"
+    add_index "people", ["sourced_id"], :name => "index_people_on_sourced_id", :unique => true
 
     create_table "course_templates", :force => true do |t|
       t.string   "sourced_id",                      :null => false
@@ -58,6 +57,7 @@ class CreateDatabase < ActiveRecord::Migration
       t.foreign_key :group_sourced_id, :groups, :sourced_id, :on_delete => :set_null
     end
     add_index "course_offerings", ["sourced_id"], :name => "index_offerings_on_sourced_id", :unique => true
+    add_index "course_offerings", ["course_template_sourced_id", "term_sourced_id"], :name => "one_offering_per_pair", :unique => true
 
     create_table "course_sections", :force => true do |t|
       t.string   "sourced_id",                      :null => false

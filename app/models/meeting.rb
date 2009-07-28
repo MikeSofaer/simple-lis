@@ -1,16 +1,21 @@
-class Meeting < ActiveRecord::Base
-  acts_as_ical
+class Meeting < LISModel
+  element :sourced_id, :required => true
+  element :target_sourced_id, :required => true
+  element :target_type, :required => true
+  element :i_calendar, :as => :raw_icalendar, :required => true
+
+  table "meetings"
+  tag :meeting
+  key_column :sourced_id
+
   def target=(target)
     self.target_sourced_id = target.sourced_id
-    self.target_type = target.class.table_name
+    self.target_type = target.class.instance_variable_get('@table_name')
   end
-
-  def self.from_xml(doc)
-    m = new(:sourced_id => doc.sourced_id,
-    :target_sourced_id => doc.target_sourced_id,
-    :target_type => doc.target_type)
-    m.set_ical(doc.i_calendar)
-    m
+  
+  def raw_icalendar=(ical)
+    ical = Vpim::Icalendar.decode(ical)[0]  if ical.is_a? String
+    @raw_icalendar = ical.encode
   end
 
   def to_xml
@@ -18,7 +23,7 @@ class Meeting < ActiveRecord::Base
     <sourced_id>#{sourced_id}</sourced_id>
     <target_sourced_id>#{target_sourced_id}</target_sourced_id>
     <target_type>#{target_type}</target_type>
-    <i_calendar>#{get_ical.to_s}</i_calendar>
+    <i_calendar>#{Vpim::Icalendar.decode(raw_icalendar)[0].to_s}</i_calendar>
     </meeting>"
   end
 end

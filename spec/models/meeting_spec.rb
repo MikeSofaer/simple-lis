@@ -4,12 +4,14 @@ describe "Meeting" do
   before(:each) do
     @meeting = Factory.build(:meeting)
   end
+  
   describe "generation from XML" do
     before(:each) do
-      @xml = Hpricot(@meeting.to_xml).meeting
+      @xml = Nokogiri(@meeting.to_xml)
     end
+    
     it "should create a saveable Meeting from a valid XML" do
-      Meeting.from_xml(@xml).save!
+      Meeting.parse(@xml.to_s).save!
     end
   end
 end

@@ -1,12 +1,13 @@
-class Person < ActiveRecord::Base
-  validates_uniqueness_of :email  #This is to make the exception pretty for the response
-  def self.from_xml(doc)
-    new(
-      :sourced_id => doc.sourced_id,
-      :given_name => doc.names.given,
-      :family_name => doc.names.family,
-      :email => doc.contact_info.email)
-  end
+class Person < LISModel
+  element :sourced_id, :required => true
+  element :given, :as => :given_name, :required => true
+  element :family, :as => :family_name, :required => true
+  element :email, :required => true
+
+  table "people"
+  tag :person
+  key_column :sourced_id
+
   def to_xml
 "<person>
   <sourced_id>#{sourced_id}</sourced_id>
