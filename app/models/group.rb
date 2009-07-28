@@ -1,5 +1,4 @@
 class Group < LISModel
-
   element :sourced_id, :required => true
   element :title, :required => true
   element :category, :required => true

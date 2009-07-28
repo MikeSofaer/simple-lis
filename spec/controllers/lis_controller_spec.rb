@@ -31,6 +31,7 @@ describe LisController do
       response.body.match(/foreign key constraint fails/).should_not be_nil
       response.status.should == "422 Unprocessable Entity"
     end
+    
     it "should allow you to create an offering with a template and term that both exist" do
       term = Factory(:term)
       xml = Hpricot(@offering.to_xml)
@@ -213,6 +214,7 @@ END:VCALENDAR
         lambda{ put :update, :resource => 'people' }.should change(Person.datamapper_class, :count).by(1)
         response.status.should == "200 OK"
       end
+      
       it "should change the information of a person already in the DB" do
         person = Factory(:person)
         Person.datamapper_class.first.email.should_not == "bob@your_school.edu"
@@ -221,7 +223,6 @@ END:VCALENDAR
         lambda{ put :update, :resource => 'people' }.should_not change(Person.datamapper_class, :count)
         response.status.should == "200 OK"
         Person.datamapper_class.first.email.should == "bob@your_school.edu"
-
       end
     end
 
