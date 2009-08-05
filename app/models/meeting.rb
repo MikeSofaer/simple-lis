@@ -26,4 +26,8 @@ class Meeting < LISModel
     <i_calendar>#{Vpim::Icalendar.decode(raw_icalendar)[0].to_s}</i_calendar>
     </meeting>"
   end
+  
+  def foreign_key_valid?
+    !Meeting.connection.query("select * from #{target_type.tableize} where sourced_id = ?", target_sourced_id).empty?
+  end  
 end

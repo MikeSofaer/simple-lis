@@ -45,4 +45,8 @@ class Membership < LISModel
     </role>
     </membership>"
   end
+  
+  def foreign_key_valid?
+    !Membership.connection.query("select * from #{target_type.tableize} where sourced_id = ?", target_sourced_id).empty?
+  end
 end
