@@ -112,11 +112,11 @@ END:VCALENDAR
         response.status.should == "422 Unprocessable Entity"
       end
 
-      it "should suceed at a put with a good meeting" do
+      it "should succeed at a put with a good meeting" do
         request.env['RAW_POST_DATA'] = "<meetings><meeting>
     <sourced_id>sample2</sourced_id>
     <target_sourced_id>#{Factory(:course_section).sourced_id}</target_sourced_id>
-    <target_type>Section</target_type>
+    <target_type>CourseSection</target_type>
     <i_calendar>BEGIN:VCALENDAR
 CALSCALE:GREGORIAN
 PRODID:-//Apple Computer, Inc//iCal 1.5//EN
@@ -233,9 +233,7 @@ END:VCALENDAR
       end
 
       it "should succeed on a put with a duplicate email" do  #I'd change this, but it's not easy to do, due to ON DUPLICATE KEY UPDATE
-
         Factory(:person, :email => "bob@your_school.edu")
-
         request.env['RAW_POST_DATA'] = @xml.to_s
         lambda{ put :update, :resource => 'people' }.should change(Person.datamapper_class, :count).by(1)
         response.status.should == "200 OK"
