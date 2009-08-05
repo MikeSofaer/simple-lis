@@ -256,6 +256,32 @@ END:VCALENDAR
         response.status.should == "200 OK"
         Person.datamapper_class.first.email.should == "bob@your_school.edu"
       end
+      
+      context "membership with invalid foreign key" do
+        before(:each) do
+          @xml = Hpricot(Factory(:membership, :person => Factory(:person), :target => Factory(:group)).to_xml)
+        end
+        
+        it "should not fail with valid relations" do
+          request.env['RAW_POST_DATA'] = @xml.to_s
+          put :update, :resource => 'memberships'
+          response.status.should == "200 OK"
+        end
+        
+        it "should fail with invalid person" do
+          @xml.at('person_sourced_id').swap "<person_sourced_id>nonexistent-sourced-id</person_sourced_id>"
+          request.env['RAW_POST_DATA'] = @xml.to_s
+          put :update, :resource => 'memberships'
+          response.status.should == "422 Unprocessable Entity"
+        end
+        
+        it "should fail with invalid target" do
+          @xml.at('person_sourced_id').swap "<target_sourced_id>nonexistent-sourced-id</target_sourced_id>"
+          request.env['RAW_POST_DATA'] = @xml.to_s
+          put :update, :resource => 'memberships'
+          response.status.should == "422 Unprocessable Entity"
+        end
+      end
     end
 
     describe "multi-record import" do
