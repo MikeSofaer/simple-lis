@@ -38,7 +38,7 @@ class LisController < ActionController::Base
       DataMapper.repository(:default).adapter.push_transaction(transaction)
       begin
         while objects.size > 0
-          s=objects.slice!(0, 1000)
+          s = objects.slice!(0, 1000)
           sourced_ids = s.map(&:sourced_id)
           logger.debug { "saved slice, sourcedIds are #{sourced_ids*', '}" }
           model.save s
