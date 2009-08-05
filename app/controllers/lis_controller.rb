@@ -15,8 +15,12 @@ class LisController < ActionController::Base
   
   def show
     object = model.datamapper_class.first(:sourced_id => params[:sourced_id])
-    render :xml => "No #{resource} with sourced_id #{params[:sourced_id]}", :status => :not_found and return  if object.blank?
-
+    
+    if object.blank?
+      logger.warn { "LisController#show couldn't find #{model.class.name} record with sourced id #{params[:sourced_id]}}" }
+      render :xml => "No #{resource} with sourced_id #{params[:sourced_id]}", :status => :not_found and return
+    end
+    
     render :xml => object.to_xml
   end
   
@@ -62,18 +66,26 @@ class LisController < ActionController::Base
     end
 
     render :xml => ids.flatten.inject('') { |res, sid| res << %Q{<url>#{url_for(:action => 'show', :sourced_id => sid)}</url>} }
+  rescue LISModel::InvalidForeignKeyError => e
+    log_error e
+    render :xml => e.message, :status => :unprocessable_entity and return
   rescue SAXualReplication::MissingElementError => e
+    log_error e
     render :xml => e.message, :status => :unprocessable_entity and return
   rescue NoMethodError => e
+    log_error e
     render :xml => "Check your XML, it may be missing tags. \n#{e.message}", :status => :unprocessable_entity and return
   rescue ActiveRecord::RecordInvalid => e
+    log_error e
     render :xml => e.message, :status => :unprocessable_entity and return
   rescue Vpim::InvalidEncodingError => e
+    log_error e
     render :xml => "Looks like your ical object is bad at the following line:\n#{e}.", :status => :unprocessable_entity and return
   rescue TypeError
+    log_error e
     render :xml => "There is something terribly wrong with your request.", :status => :unprocessable_entity and return
   rescue @@mysql_error => e
-    logger.info { "MYSQL ERROR! error is #{e.message}" }
+    log_error e
     if e.message.match(/FOREIGN KEY \("(.*)"\) REFERENCES "(.*)" \("(.*)"\)\)/)
       possibles = model.parse_multiple(request.body).map{|o| o.send($1)}  #Yeah, we parse it a again.  Got a problem with that?
       nots = model.connection.query "select #{$3} from #{$2} where #{$3} in (#{possibles.map{|a| "'" + a + "'"}.join(',')})"
@@ -100,5 +112,11 @@ class LisController < ActionController::Base
   
   def resource
     params[:resource].singularize
+  end
+  
+  protected
+  
+  def log_error(e)
+    logger.warn { "LisController#" + params[:action].to_s + " error: " + e.message }
   end
 end
