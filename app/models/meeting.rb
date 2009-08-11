@@ -14,7 +14,7 @@ class Meeting < LISModel
   end
   
   def raw_icalendar=(ical)
-    ical = Vpim::Icalendar.decode(ical)[0]  if ical.is_a? String
+    ical = Vpim::Icalendar.decode(ical)[0] if ical.is_a? String
     @raw_icalendar = ical.encode
   end
 

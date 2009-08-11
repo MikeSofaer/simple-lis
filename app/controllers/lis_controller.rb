@@ -1,7 +1,7 @@
 class LisController < ActionController::Base
   ObjectSpace.each_object(Class){ |k| @@mysql_error = k if k.name == 'MysqlError' }
   include SslRequirement
-  # ssl_required :index, :show, :update, :delete
+  # ssl_required :index, :show, :update, :destroy unless RAILS_ENV == 'test'
   
   def index
     if ALLOWED_PARENTS.include?(params[:parent]) && params[:parent] && params[:parent_sourced_id]
@@ -29,7 +29,7 @@ class LisController < ActionController::Base
     logger.debug "Start"
     objects = model.parse_multiple(request.body)
     logger.debug "Built objects at T + " + (Time.now - t).to_s
-    render :xml => "We weren't able to parse any data from that.  Are you sure the XMl is valid?", :status => :unprocessable_entity and return  if objects.size == 0
+    render :xml => "We weren't able to parse any data from that.  Are you sure the XMl is valid?", :status => :unprocessable_entity and return if objects.size == 0
 
     ids = []
     unless RAILS_ENV == 'test'

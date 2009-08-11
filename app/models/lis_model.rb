@@ -3,11 +3,11 @@ class LISModel
 
   def validate
     super
-    raise InvalidForeignKeyError  unless foreign_key_valid?
+    raise InvalidForeignKeyError unless foreign_key_valid?
   end
 
   def save!
-    raise InvalidForeignKeyError  unless foreign_key_valid?
+    raise InvalidForeignKeyError unless foreign_key_valid?
     self.class.save [self]
   end
 
